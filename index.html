@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Percolation - Epidemic Graph</title>
+    <link rel="stylesheet" type="text/css" href="./css/app.css">
+    <link rel="stylesheet" type="text/css" href="./css/WinJS-ui-light.css">
+  </head>
+  
+  <body>
+    <div id="page-container" style="width: 962px; height: 100%; position: relative; margin: 0 auto;">
+      <h1>Epidemic Graph</h1>
+      <section id="about">
+          <h2>About</h2>
+          <p>Epidemic Graph is an interactive <a href="http://en.wikipedia.org/wiki/Graph_(mathematics)">graph</a> modeling the spread of epidemics.</p>
+      </section>
+
+      <section id="app" width="960" height="480" style="position: relative; overflow: hidden;">
+        <h2>App</h2>
+        <div id="app-body" width="960" height="480"
+            style="position: relative; overflow: hidden; border: 1px solid #e3e3e3; border-radius: 4px;">
+          <div id="edit-panel" style="float: left; width: 298px; height: 480px; padding: 10px; border-right: 1px solid #e3e3e3; background-color: #f5f5f5">
+            <div style="">
+              <p>Variables for selected vectex:</p>
+            </div>
+            <div style="color: #3a87ad; background-color: #d9edf7; border-color: #bce8f1; padding: 8px 35px 8px 14px; margin-bottom: 20px;">
+              No vertex selected.
+            </div>
+            <div style="position: relative; padding-top: 10px; border-top: 1px solid #e3e3e3;">
+              <p>Directions:</p>
+              <ul>
+                  <li>Click in the open space to <strong>add a state</strong></li>
+                  <li>Drag between states to <strong>add a transition</strong></li>
+                  <li>Ctrl-drag a state to <strong>move</strong> graph layout</li>
+                  <li>Click a state or a transition to <strong>select</strong> it</li>
+                  <li>
+                    When a state is selected:
+                    <ul>
+                      <li><strong>R</strong> toggles reflexivity</li>
+                      <li><strong>Delete</strong> removes the state</li>
+                    </ul>
+                  </li>
+                  <li>
+                    When a transition is selected:
+                    <ul>
+                      <li><strong>L</strong>(eft), <strong>R</strong>(ight), <strong>B</strong>(oth) change direction</li>
+                      <li><strong>Delete</strong> removes the transition</li>
+                    </ul>
+                  </li>
+                </ul>
+            </div>
+          </div>
+          <div id="graph" style="float: left; width: 640 px; height: 480px;"></div>
+        </div>
+      </section>
+
+      <section id="details">
+          <h2>Detailed information</h2>
+          <p>To be added</p>
+      </section>
+
+      <section id="authors">
+          <h2>Authors</h2>
+          <p>Yibo G(<a href="http://github.com/nilyibo">github</a>)</p>
+      </section>
+    </div>
+  </body>
+
+  <script src="./js/d3.v3.min.js"></script>
+  <script src="./js/app.js"></script>
+</html>
