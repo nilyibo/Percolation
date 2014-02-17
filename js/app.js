@@ -14,13 +14,13 @@ var svg = d3.select('#graph')
 //  - links are always source < target; edge directions are set by 'left' and 'right'.
 var nodes = [
     {id: 0, reflexive: false},
-    {id: 1, reflexive: true },
+    {id: 1, reflexive: false },
     {id: 2, reflexive: false}
   ],
   lastNodeId = 2,
   links = [
-    {source: nodes[0], target: nodes[1], left: false, right: true },
-    {source: nodes[1], target: nodes[2], left: false, right: true }
+    {source: nodes[0], target: nodes[1], left: true, right: true },
+    {source: nodes[1], target: nodes[2], left: true, right: true }
   ];
 
 // init D3 force layout
@@ -183,7 +183,7 @@ function restart() {
       // needed by FF
       drag_line
         .classed('hidden', true)
-        .style('marker-end', '');
+        .style('marker-end', 'url(#end-arrow)');
 
       // check for drag-to-self
       mouseup_node = d;
@@ -271,7 +271,7 @@ function mouseup() {
     // hide drag line
     drag_line
       .classed('hidden', true)
-      .style('marker-end', '');
+      .style('marker-end', 'url(#end-arrow)');
   }
 
   // because :active only works in WebKit?
@@ -319,33 +319,33 @@ function keydown() {
       selected_node = null;
       restart();
       break;
-    case 66: // B
-      if(selected_link) {
-        // set link direction to both left and right
-        selected_link.left = true;
-        selected_link.right = true;
-      }
-      restart();
-      break;
-    case 76: // L
-      if(selected_link) {
-        // set link direction to left only
-        selected_link.left = true;
-        selected_link.right = false;
-      }
-      restart();
-      break;
-    case 82: // R
-      if(selected_node) {
-        // toggle node reflexivity
-        selected_node.reflexive = !selected_node.reflexive;
-      } else if(selected_link) {
-        // set link direction to right only
-        selected_link.left = false;
-        selected_link.right = true;
-      }
-      restart();
-      break;
+    // case 66: // B
+    //   if(selected_link) {
+    //     // set link direction to both left and right
+    //     selected_link.left = true;
+    //     selected_link.right = true;
+    //   }
+    //   restart();
+    //   break;
+    // case 76: // L
+    //   if(selected_link) {
+    //     // set link direction to left only
+    //     selected_link.left = true;
+    //     selected_link.right = false;
+    //   }
+    //   restart();
+    //   break;
+    // case 82: // R
+    //   if(selected_node) {
+    //     // toggle node reflexivity
+    //     selected_node.reflexive = !selected_node.reflexive;
+    //   } else if(selected_link) {
+    //     // set link direction to right only
+    //     selected_link.left = false;
+    //     selected_link.right = true;
+    //   }
+    //   restart();
+    //   break;
   }
 }
 
