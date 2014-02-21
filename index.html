@@ -20,12 +20,44 @@
         <div id="app-body" width="960" height="480"
             style="position: relative; overflow: hidden; border: 1px solid #e3e3e3; border-radius: 4px;">
           <div id="edit-panel" style="float: left; width: 298px; height: 480px; padding: 10px; border-right: 1px solid #e3e3e3; background-color: #f5f5f5">
-            <div style="">
+            <div>
               <p>Variables for selected vectex:</p>
+              <div style="color: #3a87ad; background-color: #d9edf7; border-color: #bce8f1; padding: 8px 35px 8px 14px; margin-bottom: 20px;">
+                <table id="selected_properties" width="100%">
+                  <tr>
+                    <td width="50%">Infected? </td>
+                    <td width="50%">
+                      <select>
+                        <option disabled="true">select a node</option>
+                        <option>No</option>
+                        <option>Yes</option>
+                      </select>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="50%">Threshold</td>
+                    <td width="50%">
+                      <select id="thresholdSelect">
+                        <option disabled="true">select a node</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+                </table>
+              </div>
             </div>
-            <div style="color: #3a87ad; background-color: #d9edf7; border-color: #bce8f1; padding: 8px 35px 8px 14px; margin-bottom: 20px;">
-              No vertex selected.
+
+            <div style="position: relative; padding-top: 10px; border-top: 1px solid #e3e3e3; padding-bottom: 10px">
+              <table width="100%" style="text-align: center;">
+                <tr>
+                  <td width="50%"><button>Run</button></td>
+                  <td width="50%"><button>Pause</button></td>
+                </tr>
+              </table>
             </div>
+
             <div style="position: relative; padding-top: 10px; border-top: 1px solid #e3e3e3;">
               <p>Directions:</p>
               <ul>
@@ -34,18 +66,7 @@
                   <li>Ctrl-drag a state to <strong>move</strong> graph layout</li>
                   <li>Click a state or a transition to <strong>select</strong> it</li>
                   <li>
-                    When a state is selected:
-                    <ul>
-                      <li><strong>R</strong> toggles reflexivity</li>
-                      <li><strong>Delete</strong> removes the state</li>
-                    </ul>
-                  </li>
-                  <li>
-                    When a transition is selected:
-                    <ul>
-                      <li><strong>L</strong>(eft), <strong>R</strong>(ight), <strong>B</strong>(oth) change direction</li>
-                      <li><strong>Delete</strong> removes the transition</li>
-                    </ul>
+                    When a state is selected, <strong>delete</strong> removes the state
                   </li>
                 </ul>
             </div>

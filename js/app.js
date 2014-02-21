@@ -14,7 +14,7 @@ var svg = d3.select('#graph')
 //  - links are always source < target; edge directions are set by 'left' and 'right'.
 var nodes = [
     {id: 0, reflexive: false},
-    {id: 1, reflexive: false },
+    {id: 1, reflexive: false},
     {id: 2, reflexive: false}
   ],
   lastNodeId = 2,
@@ -107,8 +107,8 @@ function restart() {
 
   // update existing links
   path.classed('selected', function(d) { return d === selected_link; })
-    .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
-    .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
+    .style('marker-start', function(d) { return 'url(#start-arrow)'; })
+    .style('marker-end', function(d) { return 'url(#end-arrow)'; });
 
 
   // add new links
@@ -279,6 +279,10 @@ function mouseup() {
 
   // clear mouse event vars
   resetMouseVars();
+
+  selected_link = null;
+
+  restart();
 }
 
 function spliceLinksForNode(node) {
@@ -319,33 +323,33 @@ function keydown() {
       selected_node = null;
       restart();
       break;
-    // case 66: // B
-    //   if(selected_link) {
-    //     // set link direction to both left and right
-    //     selected_link.left = true;
-    //     selected_link.right = true;
-    //   }
-    //   restart();
-    //   break;
-    // case 76: // L
-    //   if(selected_link) {
-    //     // set link direction to left only
-    //     selected_link.left = true;
-    //     selected_link.right = false;
-    //   }
-    //   restart();
-    //   break;
-    // case 82: // R
-    //   if(selected_node) {
-    //     // toggle node reflexivity
-    //     selected_node.reflexive = !selected_node.reflexive;
-    //   } else if(selected_link) {
-    //     // set link direction to right only
-    //     selected_link.left = false;
-    //     selected_link.right = true;
-    //   }
-    //   restart();
-    //   break;
+/*    case 66: // B
+      if(selected_link) {
+        // set link direction to both left and right
+        selected_link.left = true;
+        selected_link.right = true;
+      }
+      restart();
+      break;
+    case 76: // L
+      if(selected_link) {
+        // set link direction to left only
+        selected_link.left = true;
+        selected_link.right = false;
+      }
+      restart();
+      break;
+    case 82: // R
+      if(selected_node) {
+        // toggle node reflexivity
+        selected_node.reflexive = !selected_node.reflexive;
+      } else if(selected_link) {
+        // set link direction to right only
+        selected_link.left = false;
+        selected_link.right = true;
+      }
+      restart();
+      break;*/
   }
 }
 
