@@ -115,8 +115,8 @@ function restart() {
   path.enter().append('svg:path')
     .attr('class', 'link')
     .classed('selected', function(d) { return d === selected_link; })
-    .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
-    .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; })
+    .style('marker-start', function(d) { return 'url(#start-arrow)'; })
+    .style('marker-end', function(d) { return 'url(#end-arrow)'; })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
 
