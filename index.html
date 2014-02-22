@@ -27,10 +27,8 @@
                   <tr>
                     <td width="50%">Infected? </td>
                     <td width="50%">
-                      <select>
+                      <select id="infectionSelect">
                         <option disabled="true">select a node</option>
-                        <option>No</option>
-                        <option>Yes</option>
                       </select>
                     </td>
                   </tr>
@@ -51,8 +49,8 @@
             <div style="position: relative; padding-top: 10px; border-top: 1px solid #e3e3e3; padding-bottom: 10px">
               <table width="100%" style="text-align: center;">
                 <tr>
-                  <td width="50%"><button>Run</button></td>
-                  <td width="50%"><button>Pause</button></td>
+                  <td width="50%"><button onclick="run_click()">Run</button></td>
+                  <td width="50%"><button onclick="reload_click()">Reload</button></td>
                 </tr>
               </table>
             </div>
@@ -60,12 +58,12 @@
             <div style="position: relative; padding-top: 10px; border-top: 1px solid #e3e3e3;">
               <p>Directions:</p>
               <ul>
-                  <li>Click in the open space to <strong>add a state</strong></li>
-                  <li>Drag between states to <strong>add a transition</strong></li>
+                  <li>Click in the open space to <strong>add a node</strong></li>
+                  <li>Drag between states to <strong>add an edge</strong></li>
                   <li>Ctrl-drag a state to <strong>move</strong> graph layout</li>
-                  <li>Click a state or a transition to <strong>select</strong> it</li>
+                  <li>Click a node or an edge to <strong>select</strong> it</li>
                   <li>
-                    When a state is selected, <strong>delete</strong> removes the state
+                    When a node is selected, <strong>delete</strong> removes the node
                   </li>
                 </ul>
             </div>
@@ -79,21 +77,28 @@
           <p>To be added</p>
       </section>
 
-      <section id="authors">
-          <h2>Authors</h2>
-          <p>Yibo G(<a href="http://github.com/nilyibo">github</a>)</p>
+      <section id="refernces">
+        <h2>References and related pages</h2>
+        <p>D3.js - Data-Driven Document (<a href="http://d3js.org/">link</a>)</p>
+        <p>
+          Directed Graph Editor (<a href="http://bl.ocks.org/rkirsling/5001347">link</a>)
+        </p>
+        <p>
+          Vax | Gamifying Epidemic Prevention | Game (<a href="http://vax.herokuapp.com/">link</a>)
+        </p>
       </section>
 
-      <section id="refernces">
-        <h2>Related pages</h2>
-        <p>Vax | Gamifying Epidemic Prevention | Game (<a href="http://vax.herokuapp.com/">link</a>)</p>
-        <h2>References</h2>
-        <p>D3.js - Data-Driven Document (<a href="http://d3js.org/">link</a>)</p>
-        <p>Directed Graph Editor (<a href="http://bl.ocks.org/rkirsling/5001347">link</a>)</p>
+      <section id="pageFooter">
+        <div id="cotentCurve" style="border-bottom: 1px solid #ccc; font-size: 1px; height: 8px; margin-bottom: 8px;"></div>
+        <div id="copyright" style="margin-top: 20px; margin-bottom: 20px; color: gray;">
+          <span> Yibo G © 2014</span>
+          <a title="View on github" href="https://github.com/nilyibo/Percolation">Percolation Project</a>
+        </div>
       </section>
     </div>
   </body>
 
   <script src="./js/d3.v3.min.js"></script>
   <script src="./js/app.js"></script>
+  <script src="./js/infection.js"></script>
 </html>

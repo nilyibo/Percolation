@@ -13,9 +13,9 @@ var svg = d3.select('#graph')
 //  - reflexive edges are indicated on the node (as a bold black circle).
 //  - links are always source < target; edge directions are set by 'left' and 'right'.
 var nodes = [
-    {id: 0, reflexive: false},
-    {id: 1, reflexive: false},
-    {id: 2, reflexive: false}
+    {id: 0, reflexive: false, infected: false, threshold: 1},
+    {id: 1, reflexive: false, infected: false, threshold: 1},
+    {id: 2, reflexive: false, infected: false, threshold: 1}
   ],
   lastNodeId = 2,
   links = [
@@ -249,7 +249,7 @@ function mousedown() {
 
   // insert new node at point
   var point = d3.mouse(this),
-      node = {id: ++lastNodeId, reflexive: false};
+      node = {id: ++lastNodeId, reflexive: false, infected: false, threshold: 1};
   node.x = point[0];
   node.y = point[1];
   nodes.push(node);
