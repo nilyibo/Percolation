@@ -19,7 +19,7 @@ Simulation will stop when there are no more changes in infected people.
 
 ### Web page
 
-Visit our live page at [Epidemic](http://nilyibo.github.io/Percolation/)
+Visit our live page at [Percolation - Epidemic Graph](http://nilyibo.github.io/Percolation/)
 
 ## Authors
 
