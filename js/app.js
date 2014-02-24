@@ -336,9 +336,13 @@ function keydown() {
     case 8: // backspace
     case 46: // delete
       if(selected_node) {
+        decrementNeighborsMaxThreshold(selected_node);
         nodes.splice(nodes.indexOf(selected_node), 1);
         spliceLinksForNode(selected_node);
+        // Restore selected node properties
+        restoreSelectOptions();
       } else if(selected_link) {
+        decrementLinkEndsMaxThreshold(selected_link);
         links.splice(links.indexOf(selected_link), 1);
       }
       selected_link = null;

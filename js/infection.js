@@ -25,10 +25,43 @@ function reload_click() {
 // This function counts the number of neighbors the given node has
 function countNeighbors(node) {
     var count = 0;
-    // TODO: implemente this.
+    for (var i = 0; i < links.length; ++i)
+    {
+        if (node === links[i].source)
+            ++count;
+        if (node === links[i].target)
+            ++count;
+    }
     return count;
 }
 
+function decrementNeighborsMaxThreshold(node) {
+    for (var i = 0; i < links.length; ++i)
+    {
+        if (node === links[i].source)
+        {
+            var neighbor = links[i].target;
+            if (neighbor.threshold == countNeighbors(neighbor) && neighbor.threshold != 1)
+                --neighbor.threshold;
+            continue;
+        }
+        if (node === links[i].target)
+        {
+            var neighbor = links[i].source;
+            if (neighbor.threshold == countNeighbors(neighbor) && neighbor.threshold != 1)
+                --neighbor.threshold;
+            continue;
+        }
+    }
+}
+
+function decrementLinkEndsMaxThreshold(link) {
+    // decrement threshold for nodes of the link to be removed if it's at max threshold
+    if (link.source.threshold == countNeighbors(link.source) && link.source.threshold != 1) 
+      --link.source.threshold;
+    if (link.target.threshold == countNeighbors(link.target) && link.target.threshold != 1) 
+      --link.target.threshold;
+}
 
 /*
     ********************************
@@ -67,7 +100,7 @@ function updateSelectOptions() {
     // Build the thresholdSelect dropdown menu
 
     // get max threshold
-    var numNeighbors = countNeighbors(selected_node);
+    var maxThreshold = Math.max(countNeighbors(selected_node), 1); // 0 threshold is not allowed, minimum is 1.
 
     // Clear existing options
     var tSelect = document.getElementById('thresholdSelect');
@@ -76,7 +109,7 @@ function updateSelectOptions() {
         tSelect.remove(j);
     }
     // Append new options
-    for(var j = 0; j <= numNeighbors; ++j)
+    for(var j = 0; j <= maxThreshold; ++j)
     {
         var option = document.createElement("option");
         option.text = j;
