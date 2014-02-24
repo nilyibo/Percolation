@@ -1,3 +1,10 @@
+/**
+ * This file contains the function for running the epidemics
+ *
+ * @file infection.js
+ * @author Yibo G (https://github.com/nilyibo)
+ */
+
 /*
     ********************************
         UI Button onclick events
@@ -7,7 +14,30 @@
 // This is the event hanlder for 'Run' button
 // Functionality: Start the spread of epidemics
 function run_click() {
-    // TODO: implement epidemic development animation.
+    var iSelect = document.getElementById('infectionSelect');
+    var tSelect = document.getElementById('thresholdSelect');
+    // Disable selection change when epidemics start
+    iSelect.disabled = true;
+    tSelect.disabled = true;
+    iSelect.title = "Selection change is disabled while epidemics are running.";
+    tSelect.title = "Selection change is disabled while epidemics are running.";
+
+    var noMoreChanges = false;
+    var prevInfectionStatus = [], currInfectionStatus = [];
+
+    while (!noMoreChanges) // Continue to run epidemics until there are no more changes.
+    {
+        oneRoundSpread();
+        prevInfectionStatus = currInfectionStatus;
+        currInfectionStatus = getInfectionStatus();
+        noMoreChanges = compareList(prevInfectionStatus, currInfectionStatus);
+    }
+
+    // Re-enable selection change after epidemics end
+    iSelect.disabled = false;
+    tSelect.disabled = false;
+    iSelect.title = "";
+    tSelect.title = "";
 }
 
 // This is the event hanlder for 'Reload' button
@@ -18,9 +48,53 @@ function reload_click() {
 
 /*
     ********************************
+        General helper functions
+    ********************************
+*/
+
+// This function return a list of booleans indicating whether each node is infected
+function getInfectionStatus() {
+    var infectionStatus = [];
+    for (var i = 0; i < nodes.length; ++i)
+    {
+        infectionStatus.push(nodes[i].infected);
+        restart();
+    }
+    return infectionStatus;
+}
+
+// Thsi function check whether two lists have the same elements.
+function compareList(list1, list2) {
+    if (list1.length != list2.length)
+        return false;
+    for (var i = 0; i < list1.length; ++i)
+        if(list1[i] != list2[i])
+            return false;
+    return true;
+}
+
+/*
+    ********************************
         Graph helper functions
     ********************************
 */
+
+// Core function to simulate one round of epidemics spread
+
+function oneRoundSpread() {
+    var nextRoundInfected = [];
+    for (var i = 0; i < nodes.length; ++i)
+    {
+        if (nodes[i].infected)
+            nextRoundInfected.push(true);
+        else if (countInfectedNeighbors(nodes[i]) >= nodes[i].threshold)
+            nextRoundInfected.push(true);
+        else
+            nextRoundInfected.push(false);
+    }
+    for (var i = 0; i < nodes.length; ++i)
+        nodes[i].infected = nextRoundInfected[i];
+}
 
 // This function counts the number of neighbors the given node has
 function countNeighbors(node) {
@@ -30,6 +104,19 @@ function countNeighbors(node) {
         if (node === links[i].source)
             ++count;
         if (node === links[i].target)
+            ++count;
+    }
+    return count;
+}
+
+// This function counts the number of neighbors the given node has
+function countInfectedNeighbors(node) {
+    var count = 0;
+    for (var i = 0; i < links.length; ++i)
+    {
+        if (node === links[i].source && links[i].target.infected)
+            ++count;
+        if (node === links[i].target && links[i].source.infected)
             ++count;
     }
     return count;
