@@ -138,7 +138,9 @@ function restart() {
 
   // update existing nodes (reflexive & selected visual states)
   circle.selectAll('circle')
-    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); })
+    .style('fill', function(d) { return (d === selected_node)
+      ? (d.infected ? d3.rgb("#f62217").brighter().toString() : d3.rgb("#5cb3ff").brighter().toString())
+      : (d.infected ? "#f62217" : "#5cb3ff"); })
     .classed('reflexive', function(d) { return d.reflexive; });
 
   // add new nodes
@@ -147,8 +149,10 @@ function restart() {
   g.append('svg:circle')
     .attr('class', 'node')
     .attr('r', 12)
-    .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id); })
-    .style('stroke', function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
+    .style('fill', function(d) { return (d === selected_node)
+      ? (d.infected ? d3.rgb("#f62217").brighter().toString() : d3.rgb("#5cb3ff").brighter().toString())
+      : (d.infected ? "#f62217" : "#5cb3ff"); })
+    .style('stroke', function(d) { return d.infected ? d3.rgb("#f62217").darker().toString() : d3.rgb("#5cb3ff").darker().toString(); })
     .classed('reflexive', function(d) { return d.reflexive; })
     .on('mouseover', function(d) {
       if(!mousedown_node || d === mousedown_node) return;
@@ -253,6 +257,10 @@ function mousedown() {
   node.x = point[0];
   node.y = point[1];
   nodes.push(node);
+
+  // Clear selected node and link after insertion
+  selected_node = null;
+  selected_link = null;
 
   restart();
 }
