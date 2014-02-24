@@ -280,8 +280,6 @@ function mouseup() {
   // clear mouse event vars
   resetMouseVars();
 
-  selected_link = null;
-
   restart();
 }
 
