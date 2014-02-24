@@ -125,6 +125,8 @@ function restart() {
       if(mousedown_link === selected_link) selected_link = null;
       else selected_link = mousedown_link;
       selected_node = null;
+      // Restore selected node properties
+      restoreSelectOptions();
       restart();
     });
 
@@ -169,8 +171,18 @@ function restart() {
 
       // select node
       mousedown_node = d;
-      if(mousedown_node === selected_node) selected_node = null;
-      else selected_node = mousedown_node;
+      if(mousedown_node === selected_node)
+      {
+        selected_node = null;
+        // Restore selected node properties
+        restoreSelectOptions();
+      }
+      else
+      {
+        selected_node = mousedown_node;
+        // Load selected node properties
+        updateSelectOptions();
+      }
       selected_link = null;
 
       // reposition drag line
@@ -225,6 +237,8 @@ function restart() {
       // select new link
       selected_link = link;
       selected_node = null;
+      // Restore selected node properties
+      restoreSelectOptions();
       restart();
     });
 
@@ -261,6 +275,8 @@ function mousedown() {
   // Clear selected node and link after insertion
   selected_node = null;
   selected_link = null;
+  // Restore selected node properties
+  restoreSelectOptions();
 
   restart();
 }
@@ -332,6 +348,8 @@ function keydown() {
     case 27: // escape
       selected_link = null;
       selected_node = null;
+      // Restore selected node properties
+      restoreSelectOptions();
       restart();
       break;
 /*    case 66: // B
