@@ -321,6 +321,11 @@ function keydown() {
       selected_node = null;
       restart();
       break;
+    case 27: // escape
+      selected_link = null;
+      selected_node = null;
+      restart();
+      break;
 /*    case 66: // B
       if(selected_link) {
         // set link direction to both left and right
