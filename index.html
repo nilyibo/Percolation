@@ -77,7 +77,14 @@
           </div>
 
           <div id="graph" style="float: left; width: 640 px; height: 480px;"></div>
+          <div id="loadFile" style="float: left">
+            Alternatively, you can upload your node/edge list.
+            <input type="file" id="files" style="" />
+            <output id="list"></output>
+          </div>
         </div>
+
+        
       </section>
       <br />
 
@@ -122,5 +129,20 @@
 
   <script type="text/javascript">
     initSelectOnChange();
+    // http://www.html5rocks.com/en/tutorials/file/dndfiles/
+      function handleFileSelect(evt) {
+        var files = evt.target.files; // FileList object
+
+        // files is a FileList of File objects. List some properties.
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+          output.push('<strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                      f.size, ' bytes, last modified: ',
+                      f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a');
+        }
+        document.getElementById('list').innerHTML = output.join('');
+      }
+
+      document.getElementById('files').addEventListener('change', handleFileSelect, false);
   </script>
 </html>
