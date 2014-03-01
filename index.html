@@ -81,7 +81,7 @@
 
         <div id="loadFile" style="width: 960px;">
           <p>
-            Alternatively, you can upload your graph.
+            Alternatively, you can upload your graph. (See note in 'Detail Information' section)
           </p>
           <div id="fileInput" style="height: 32px;">
             <input type="file" id="files" style="min-width: 85px; width: 85px;" />
@@ -102,6 +102,14 @@
           <p>
             Simulation will stop when there are no more changes in infected people.
           </p>
+          <p>
+            Note: Graph file must be in the following format. Also, the number of elements in line 1 must be equal to the number of elements in line 3. Click <a href="./example_graph.txt">here</a> for an example graph (Icosahedron) file.
+          </p>
+          <ul>
+            <li>line 1: [Id1, Id2, Id3, ...]</li>
+            <li>line 2: [(Src1, Dest1), (Src2, Dest2), ...]</li>
+            <li>line 3: [Thres1, Thres2, Thres3, ...]</li>
+          </ul>
       </section>
 
       <section id="refernces">
