@@ -269,12 +269,17 @@ var firstLine;
 function parseGraphFile(evt)
 {
     // Back up current nodes/links list
-    var backup = [nodes, lastNodeId, links];
+    var backup = [nodes, lastNodeId, links, selected_node, selected_link];
     // Clear existing graph
     nodes = [];
     lastNodeId = 0;
     links = [];
     restart();
+
+    // Clear node/link selection
+    selected_node = null;
+    selected_link = null;
+    restoreSelectOptions();
 
     fileContent = evt.target.result;
     // General validity check
@@ -392,6 +397,9 @@ function parseGraphFailed(backup, message)
     nodes = backup[0];
     lastNodeId = backup[1];
     links = backup[2];
+    selected_node = backup[3];
+    selected_link = backup[4];
+    restart();
     alert('[Error]: ' + message);
     return;
 }
