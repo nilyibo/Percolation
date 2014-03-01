@@ -8,7 +8,7 @@
   </head>
   
   <body style="overflow-y: scroll;">
-    <div id="page-container" style="width: 962px; height: 100%; position: relative; margin: 0 auto;">
+    <div id="page-container" style="width: 962px; position: relative; margin: 0 auto;">
       <h1>Epidemic Graph</h1>
       <br />
 
@@ -17,9 +17,9 @@
           <p>Epidemic Graph is an interactive <a href="http://en.wikipedia.org/wiki/Graph_(mathematics)">graph</a> modeling the spread of epidemics.</p>
       </section>
 
-      <section id="app" width="960" height="480" style="position: relative; overflow: hidden;">
+      <section id="app" width="960px" height="480px" style="position: relative; overflow: hidden;">
         <h2>App</h2>
-        <div id="app-body" width="960" height="480"
+        <div id="app-body" width="960px" height="480px"
             style="position: relative; overflow: hidden; border: 1px solid #e3e3e3; border-radius: 4px;">
           <div id="edit-panel" style="float: left; width: 298px; height: 480px; padding: 10px; border-right: 1px solid #e3e3e3; background-color: #f5f5f5">
             <div>
@@ -77,14 +77,17 @@
           </div>
 
           <div id="graph" style="float: left; width: 640 px; height: 480px;"></div>
-          <div id="loadFile" style="float: left">
-            Alternatively, you can upload your node/edge list.
-            <input type="file" id="files" style="" />
+        </div>
+
+        <div id="loadFile" style="width: 960px;">
+          <p>
+            Alternatively, you can upload your graph.
+          </p>
+          <div id="fileInput" style="height: 32px;">
+            <input type="file" id="files" style="min-width: 85px; width: 85px;" />
             <output id="list"></output>
           </div>
         </div>
-
-        
       </section>
       <br />
 
@@ -129,20 +132,6 @@
 
   <script type="text/javascript">
     initSelectOnChange();
-    // http://www.html5rocks.com/en/tutorials/file/dndfiles/
-      function handleFileSelect(evt) {
-        var files = evt.target.files; // FileList object
-
-        // files is a FileList of File objects. List some properties.
-        var output = [];
-        for (var i = 0, f; f = files[i]; i++) {
-          output.push('<strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                      f.size, ' bytes, last modified: ',
-                      f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a');
-        }
-        document.getElementById('list').innerHTML = output.join('');
-      }
-
-      document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    document.getElementById('files').addEventListener('change', handleFileSelect, false);
   </script>
 </html>
