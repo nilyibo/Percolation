@@ -199,6 +199,8 @@ function updateSelectOptions() {
     {
         var option = document.createElement("option");
         option.text = j;
+        if (j == 0)
+            option.disabled = true;
         tSelect.add(option);
     }
     tSelect.selectedIndex = selected_node.threshold;
@@ -400,6 +402,7 @@ function parseGraphFailed(backup, message)
     selected_node = backup[3];
     selected_link = backup[4];
     restart();
+    updateSelectOptions();
     alert('[Error]: ' + message);
     return;
 }
