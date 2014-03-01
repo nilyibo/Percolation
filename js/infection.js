@@ -21,23 +21,31 @@ function run_click() {
     tSelect.disabled = true;
     iSelect.title = "Selection change is disabled while epidemics are running.";
     tSelect.title = "Selection change is disabled while epidemics are running.";
+    epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
 
     var noMoreChanges = false;
     var prevInfectionStatus = [], currInfectionStatus = [];
 
-    while (!noMoreChanges) // Continue to run epidemics until there are no more changes.
-    {
+    var intervalID, roundNo = 1;
+
+    intervalID = setInterval(function () {
+        epidemicsStatus.innerText = 'Status: (Running) Round ' + roundNo + '.';
         oneRoundSpread();
         prevInfectionStatus = currInfectionStatus;
         currInfectionStatus = getInfectionStatus();
         noMoreChanges = compareList(prevInfectionStatus, currInfectionStatus);
-    }
-
-    // Re-enable selection change after epidemics end
-    iSelect.disabled = false;
-    tSelect.disabled = false;
-    iSelect.title = "";
-    tSelect.title = "";
+        ++roundNo;
+        if (noMoreChanges)
+        {
+            clearInterval(intervalID);
+            // Re-enable selection change after epidemics end
+            iSelect.disabled = false;
+            tSelect.disabled = false;
+            iSelect.title = "";
+            tSelect.title = "";
+            epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped.';
+        }
+    }, 1000);
 }
 
 // This is the onclick event hanlder for 'Reload' button

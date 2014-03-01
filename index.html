@@ -77,6 +77,7 @@
           </div>
 
           <div id="graph" style="float: left; width: 640 px; height: 480px;"></div>
+          <div id="epidemicsStatus">Status: (Idle)</div>
         </div>
 
         <div id="loadFile" style="width: 960px;">
@@ -100,7 +101,7 @@
             Initially, you can set some people to be infected. Once started, in each round, infection spreads as follow: For each person, if the number of infected neighbors is greater than or equal to the preset threshold, then the person becomes infected.
           </p>
           <p>
-            Simulation will stop when there are no more changes in infected people.
+            Simulation runs at 1 second per round, and it stops when there are no more changes in infected people.
           </p>
           <p>
             Note: Graph file must be in the following format. Also, the number of elements in line 1 must be equal to the number of elements in line 3. Click <a href="./example_graph.txt">here</a> for an example graph (Icosahedron) file.
