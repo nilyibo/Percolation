@@ -12,7 +12,7 @@
 */
 
 // This is the onclick event hanlder for 'Run' button
-// Functionality: Start the spread of epidemics
+// Functionality: Start the spread of epidemics.
 function run_click() {
     epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
     // Disable the button itself to prevent multiple epidemics running
@@ -68,7 +68,10 @@ function run_click() {
                 });
             progress += 0.025;
             if (progress >= 1)
+            {
                 clearInterval(subIntervalID);
+                restart();
+            }
         }, 10); // Update color every 20 ms for 40 times.
 
         if (noMoreChanges)
@@ -77,7 +80,7 @@ function run_click() {
             // Restore selected node/edge
             selected_node = currSelectedNode;
             selected_link = currSelectedEdge;
-            restart();
+            // restart();
             // Re-enable selection change after epidemics end
             iSelect.title = "";
             tSelect.title = "";
@@ -92,8 +95,16 @@ function run_click() {
     }, 1000);
 }
 
+// This is the onclick event hanlder for 'Vaccinate' button
+// Functionality: Set all nodes' infection status to not infected.
+function vaccinate_click() {
+    for (var i = 0; i < nodes.length; ++i)
+        nodes[i].infected = false;
+    restart();
+}
+
 // This is the onclick event hanlder for 'Reload' button
-// Functionality: reload the page
+// Functionality: reload the page.
 function reload_click() {
     location.reload();
 }
@@ -108,14 +119,11 @@ function reload_click() {
 function getInfectionStatus() {
     var infectionStatus = [];
     for (var i = 0; i < nodes.length; ++i)
-    {
         infectionStatus[nodes[i].id] = nodes[i].infected; // Node is identified by id, not by index
-        restart();
-    }
     return infectionStatus;
 }
 
-// Thsi function check whether two lists have the same elements.
+// This function check whether two lists have the same elements
 function compareList(list1, list2) {
     if (list1.length != list2.length)
         return false;
