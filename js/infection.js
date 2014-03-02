@@ -15,37 +15,75 @@
 // Functionality: Start the spread of epidemics
 function run_click() {
     epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
-    var iSelect = document.getElementById('infectionSelect');
-    var tSelect = document.getElementById('thresholdSelect');
     // Disable the button itself to prevent multiple epidemics running
     document.getElementById('runButton').disabled = true;
     document.getElementById('runButton').title = "Epidemics are already running.";
     // Disable selection change when epidemics start
+    restoreSelectOptions();
+    var iSelect = document.getElementById('infectionSelect');
+    var tSelect = document.getElementById('thresholdSelect');
     iSelect.disabled = true;
     tSelect.disabled = true;
     iSelect.title = "Selection change is disabled while epidemics are running.";
     tSelect.title = "Selection change is disabled while epidemics are running.";
+    // Remove node/edge selection temporarily.
+    var currSelectedNode = selected_node;
+    var currSelectedEdge = selected_link;
+    selected_node = null;
+    selected_link = null;
+    restart();
 
     var noMoreChanges = false;
-    var prevInfectionStatus = [], currInfectionStatus = [];
+    var prevInfectionStatus = [], currInfectionStatus = getInfectionStatus();
 
     var intervalID, roundNo = 1;
 
-    intervalID = setInterval(function () {
+    intervalID = setInterval(function() {
         epidemicsStatus.innerText = 'Status: (Running) Round ' + roundNo + '.';
         oneRoundSpread();
         prevInfectionStatus = currInfectionStatus;
         currInfectionStatus = getInfectionStatus();
         noMoreChanges = compareList(prevInfectionStatus, currInfectionStatus);
         ++roundNo;
+
+        // Change color gradually
+        var subIntervalID,
+            progress = 0;   // steps of color transition (0 ~ 1)
+        subIntervalID = setInterval(function() {
+            circle.selectAll('circle')
+                .style('fill', function(d) {
+                    var infectedColor = "#f62217", nonInfecColor = "#5cb3ff";
+                    if (prevInfectionStatus[d.id] == currInfectionStatus[d.id])
+                        return (d.infected ? infectedColor : nonInfecColor);
+                    else    // Just got infected
+                        return mixColor(infectedColor, nonInfecColor, progress + 0.025);
+                })
+                .style('stroke', function(d) {
+                    var infectedColor = d3.rgb("#f62217").darker().toString(),
+                        nonInfecColor = d3.rgb("#5cb3ff").darker().toString();
+                    if (prevInfectionStatus[d.id] == currInfectionStatus[d.id])
+                        return (d.infected ? infectedColor : nonInfecColor);
+                    else    // Just got infected
+                        return mixColor(infectedColor, nonInfecColor, progress + 0.025);
+                });
+            progress += 0.025;
+            if (progress >= 1)
+                clearInterval(subIntervalID);
+        }, 10); // Update color every 20 ms for 40 times.
+
         if (noMoreChanges)
         {
             clearInterval(intervalID);
+            // Restore selected node/edge
+            selected_node = currSelectedNode;
+            selected_link = currSelectedEdge;
+            restart();
             // Re-enable selection change after epidemics end
             iSelect.title = "";
             tSelect.title = "";
             iSelect.disabled = false;
             tSelect.disabled = false;
+            updateSelectOptions();
             // Re-enable this button
             document.getElementById('runButton').title = "Start epidemics!";
             document.getElementById('runButton').disabled = false;
@@ -71,7 +109,7 @@ function getInfectionStatus() {
     var infectionStatus = [];
     for (var i = 0; i < nodes.length; ++i)
     {
-        infectionStatus.push(nodes[i].infected);
+        infectionStatus[nodes[i].id] = nodes[i].infected; // Node is identified by id, not by index
         restart();
     }
     return infectionStatus;
@@ -85,6 +123,36 @@ function compareList(list1, list2) {
         if(list1[i] != list2[i])
             return false;
     return true;
+}
+
+// This converts decimal rgb number to a two-digit hex number
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+// This converts rgb to its hex string
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+// This function convert a hex color code into its rgb components
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+// This will return a hex color of percentage * color1 + (1 - percentage) * color2
+function mixColor(color1, color2, percentage) {
+    var rgb1 = hexToRgb(color1), rgb2 = hexToRgb(color2);
+    var r = Math.floor(rgb1.r * percentage + rgb2.r * (1 - percentage)),
+        g = Math.floor(rgb1.g * percentage + rgb2.g * (1 - percentage)),
+        b = Math.floor(rgb1.b * percentage + rgb2.b * (1 - percentage));
+    return rgbToHex(r, g, b);
 }
 
 /*
@@ -299,7 +367,7 @@ function parseGraphFile(evt)
 
     fileContent = evt.target.result;
     // General validity check
-    if (fileContent.match(/[^0123456789\[\]\(\)\,\n\s]/g) != null)
+    if (fileContent.match(/[^\d\[\]\(\)\,\n\s]/g) != null)
     {
         parseGraphFailed(backup, 'Illegal character!\nOnly digits, brackets, parentheses and commas are allowed.');
         return;
