@@ -103,10 +103,18 @@ function vaccinate_click() {
     restart();
 }
 
-// This is the onclick event hanlder for 'Reload' button
-// Functionality: reload the page.
-function reload_click() {
-    location.reload();
+// This is the onclick event hanlder for 'Save' button
+// Functionality: save the the current graph to file.
+function saveGraph_click() {
+    var graphDownload = window.document.createElement('a');
+    var graphFileContent = generateGraphFile();
+    graphDownload.href = window.URL.createObjectURL(new Blob([graphFileContent], {type: 'text/plain;charset=utf-8;'}));
+    graphDownload.download = 'my_graph.txt';    // File name
+
+    // Append anchor to body temporarily to initiate download
+    document.body.appendChild(graphDownload);
+    graphDownload.click();
+    document.body.removeChild(graphDownload);
 }
 
 /*
@@ -354,8 +362,12 @@ function handleFileSelect(evt) {
     reader.readAsText(f, 'UTF-8');      // Read the file as text
 }
 
-var fileContent;
-var firstLine;
+
+/*
+    ********************************
+        Graph file I/O
+    ********************************
+*/
 
 // This function will parse the uploaded file and update the graph accordingly
 function parseGraphFile(evt)
@@ -373,7 +385,7 @@ function parseGraphFile(evt)
     selected_link = null;
     restoreSelectOptions();
 
-    fileContent = evt.target.result;
+    var fileContent = evt.target.result;
     // General validity check
     if (fileContent.match(/[^\d\[\]\(\)\,\n\s]/g) != null)
     {
@@ -389,7 +401,7 @@ function parseGraphFile(evt)
 
     // Get the first line
     var newLine = fileContent.search('\n');
-    firstLine = fileContent.substr(0, newLine);
+    var firstLine = fileContent.substr(0, newLine);
     fileContent = fileContent.substr(newLine + 1);
     // Get the second line
     newLine = fileContent.search('\n');
@@ -484,6 +496,7 @@ function parseGraphFile(evt)
     restart();
 }
 
+// Alert user the given error message and restore current graph from backup
 function parseGraphFailed(backup, message)
 {
     nodes = backup[0];
@@ -495,4 +508,36 @@ function parseGraphFailed(backup, message)
     updateSelectOptions();
     alert('[Error]: ' + message);
     return;
+}
+
+// This will generate a text file describing the graph.
+function generateGraphFile()
+{
+    var result = '';
+
+    // Add nodes list
+    result += '[';
+    for (var i = 0; i < nodes.length; ++i)
+        result += nodes[i].id + ', ';
+    // Replace the last ', ' with ']'
+    result = result.substr(0, result.length - 2);
+    result += ']\r\n';
+
+    // Add links list
+    result += '[';
+    for (var i = 0; i < links.length; ++i)
+        result += '(' + links[i].source.id + ', ' + links[i].target.id + '), ';
+    // Replace the last ', ' with ']'
+    result = result.substr(0, result.length - 2);
+    result += ']\r\n';
+
+    // Add threshold list
+    result += '[';
+    for (var i = 0; i < nodes.length; ++i)
+        result += nodes[i].threshold + ', ';
+    // Replace the last ', ' with ']'
+    result = result.substr(0, result.length - 2);
+    result += ']';
+
+    return result;
 }
