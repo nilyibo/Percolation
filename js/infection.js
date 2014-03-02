@@ -14,14 +14,17 @@
 // This is the onclick event hanlder for 'Run' button
 // Functionality: Start the spread of epidemics
 function run_click() {
+    epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
     var iSelect = document.getElementById('infectionSelect');
     var tSelect = document.getElementById('thresholdSelect');
+    // Disable the button itself to prevent multiple epidemics running
+    document.getElementById('runButton').disabled = true;
+    document.getElementById('runButton').title = "Epidemics are already running.";
     // Disable selection change when epidemics start
     iSelect.disabled = true;
     tSelect.disabled = true;
     iSelect.title = "Selection change is disabled while epidemics are running.";
     tSelect.title = "Selection change is disabled while epidemics are running.";
-    epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
 
     var noMoreChanges = false;
     var prevInfectionStatus = [], currInfectionStatus = [];
@@ -39,10 +42,13 @@ function run_click() {
         {
             clearInterval(intervalID);
             // Re-enable selection change after epidemics end
-            iSelect.disabled = false;
-            tSelect.disabled = false;
             iSelect.title = "";
             tSelect.title = "";
+            iSelect.disabled = false;
+            tSelect.disabled = false;
+            // Re-enable this button
+            document.getElementById('runButton').title = "Start epidemics!";
+            document.getElementById('runButton').disabled = false;
             epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped.';
         }
     }, 1000);
