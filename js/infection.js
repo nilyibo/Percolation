@@ -90,7 +90,7 @@ function run_click() {
             // Re-enable this button
             document.getElementById('runButton').title = "Start epidemics!";
             document.getElementById('runButton').disabled = false;
-            epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped.';
+            epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped after ' + (roundNo - 2) + ' rounds.';
         }
     }, 1000);
 }
@@ -410,28 +410,50 @@ function parseGraphFile(evt)
     fileContent = fileContent.substr(newLine + 1);
     newLine = fileContent.search('\n');
     var thirdLine = (newLine == -1) ? fileContent : fileContent.substr(0, newLine);
+    var fourthLine = '';
     // Check the rest
     if (newLine != -1)
     {
         fileContent = fileContent.substr(newLine + 1);
-        if (fileContent.length != 0)
-            alert('[Warning] Ignoring any input after line 3.');
+        if (fileContent.find('[') == -1)
+            alert('[Warning] No infection status specified, default to NOT infected.');
+        else
+        {
+            newLine = fileContent.search('\n');
+            fourthLine = (newLine == -1) ? fileContent : fileContent.substr(0, newLine);
+        }
     }
 
     // Check node list validity
-    var match1 = firstLine.match(/\,/g), match3 = thirdLine.match(/\,/g);
-    if ((match1 != null && match3 == null) || (match1 == null && match3 != null)    // one is null and the other is not
-        || (match1 != null && match3 != null && (match1.length != match3.length)) ) // both are not null and length differ
+    var match1 = firstLine.match(/\,/g), match3 = thirdLine.match(/\,/g), match4 = fourthLine.match(/\,/g);
+    var illegalInput = !(match1 == null && match3 == null && match4 == null) // only one node
+                        && (fourthLine.length == 0 && match1.length != match3.length) // Infection status not specified
+                        && (fourthLine.length != 0 && ( // All three lists count must match
+                                (match1.length != match3.length) || (match1.length != match4.length) || (match3.length != match4.length)
+                            ));
+    if (illegalInput)
     {
         parseGraphFailed(backup, 'Number of nodes is not equal to number of thresholds.');
         return;
     }
     var nodeCount = (firstLine.match(/\,/g) == null) ? 1 : (firstLine.match(/\,/g).length + 1);
+    if (fourthLine.length == 0) // Create a list of all '0's to reduce code length below
+    {
+        fourthLine += '[';
+        for (var i = 0; i < nodeCount; ++i)
+        {
+            fourthLine += '0, ';
+        }
+        fourthLine = fourthLine.substr(0, fourthLine.length - 2);
+        fourthLine += ']';
+    }
     var index1 = firstLine.search(/\[/g);
     var index3 = thirdLine.search(/\[/g);
-    if (index1 == -1 || index3 == -1 || firstLine.search(/\]/g) == -1 || thirdLine.search(/\]/g) == -1)
+    var index4 = thirdLine.search(/\[/g);
+    if (index1 == -1 || index3 == -1 || index4 == -1
+        || firstLine.search(/\]/g) == -1 || thirdLine.search(/\]/g) == -1 || fourthLine.search(/\]/g) == -1)
     {
-        parseGraphFailed(backup, 'Node/Threshold line is not a bracked-enclosed list.');
+        parseGraphFailed(backup, 'Node/Threshold/Infection status line is not a bracked-enclosed list.');
         return;
     }
 
@@ -440,17 +462,20 @@ function parseGraphFile(evt)
     {
         firstLine = firstLine.substr(index1 + 1);
         thirdLine = thirdLine.substr(index3 + 1);
+        fourthLine = fourthLine.substr(index4 + 1);
         // The last one ends with ']'
         index1 = firstLine.search((i == nodeCount - 1) ? ']' : ',');
         index3 = thirdLine.search((i == nodeCount - 1) ? ']' : ',');
+        index4 = fourthLine.search((i == nodeCount - 1) ? ']' : ',');
         var currId = parseInt(firstLine.substr(0, index1));
         var currThreshold = parseInt(thirdLine.substr(0, index3));
-        if (isNaN(currId) || isNaN(currThreshold))
+        var currInfected = parseInt(fourthLine.substr(0, index4));
+        if (isNaN(currId) || isNaN(currThreshold) || isNaN(currInfected))
         {
-            parseGraphFailed(backup, 'Node id / Threshold is an illegal number.');
+            parseGraphFailed(backup, 'Node id / Threshold / Infection status is an illegal number.');
             return;
         }
-        nodes.push({id: currId, reflexive: false, infected: false, threshold: currThreshold});
+        nodes.push({id: currId, reflexive: false, infected: (currInfected == 1 ? true : false), threshold: currThreshold});
         ++lastNodeId;
     }
 
@@ -535,6 +560,14 @@ function generateGraphFile()
     result += '[';
     for (var i = 0; i < nodes.length; ++i)
         result += nodes[i].threshold + ', ';
+    // Replace the last ', ' with ']'
+    result = result.substr(0, result.length - 2);
+    result += ']\r\n';
+
+    // Add infection status list
+    result += '[';
+    for (var i = 0; i < nodes.length; ++i)
+        result += (nodes[i].infected ? '1' : '0') + ', ';
     // Replace the last ', ' with ']'
     result = result.substr(0, result.length - 2);
     result += ']';
