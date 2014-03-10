@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Percolation - Square</title>
+    <link rel="stylesheet" type="text/css" href="./css/WinJS-ui-light.css">
+  </head>
+
+  <body style="overflow-y: scroll;">
+    <section>
+      <div id="control-container" style="margin-top: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e3e3e3;">
+        <table width="800px">
+          <tr>
+            <td><button id="runButton" onclick="runButton_click()">Run</button></td>
+            <td><button id="resetButton" onclick="resetButton_click()">Reset</button></td>
+            <td>Threshold:</td>
+            <td>
+              <select id="thresholdSelect" onchange="thresholdSelect_changed()">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div id="graph-container">
+        <svg></svg>
+      </div>
+    </section>
+  </body>
+
+  <script src="./js/default.js"></script>   <!-- functions used for square infection model -->
+  <script type="text/javascript">
+    window.onload = initSqaureGrid();
+  </script>
+
+</html>

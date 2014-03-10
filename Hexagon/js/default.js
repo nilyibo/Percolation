@@ -11,7 +11,6 @@ function initHexagonGrid()
 	{
 		hexagons[i].style.fill = "#ffffff";
 		hexagons[i].onclick = (function(){
-			alert('u clicked me');
 			var id = hexagons[i].id;
 			return function() { hexagon_click(id) };
 		})();
