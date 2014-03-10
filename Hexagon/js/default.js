@@ -58,15 +58,21 @@ function thresholdSelect_changed() {
 // Functionality: Start the spread of epidemics.
 function runButton_click() {
 	epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
+	epidemicsStatus.style.color = '#ff0000';
 	// Disable the button itself to prevent multiple epidemics running
 	document.getElementById('runButton').disabled = true;
 	document.getElementById('runButton').title = "Epidemics are already running.";
 	document.getElementById('resetButton').disabled = true;
 	document.getElementById('resetButton').title = "Epidemics are already running.";
+	document.getElementById('randomButton').disabled = true;
+	document.getElementById('randomButton').title = "Epidemics are already running.";
 	// Disable selection change when epidemics start
 	var tSelect = document.getElementById('thresholdSelect');
 	tSelect.disabled = true;
 	tSelect.title = "Selection change is disabled while epidemics are running.";
+	// Disable 'onclick' event handler for all hexagons
+	for (var i = 0; i < hexagons.length; ++i)
+		hexagons[i].onclick = null;
 
 	var noMoreChanges = false;
 	var prevInfectionStatus = [], currInfectionStatus = getInfectionStatus();
@@ -99,15 +105,25 @@ function runButton_click() {
 		if (noMoreChanges)
 		{
 			clearInterval(intervalID);
+			// Re-enable 'onclick' event handler for all hexagons
+			for (var i = 0; i < hexagons.length; ++i)
+				hexagons[i].onclick = (function(){
+					var id = hexagons[i].id;
+					return function() { hexagon_click(id) };
+				})();
 			// Re-enable selection change after epidemics end
 			tSelect.title = "";
 			tSelect.disabled = false;
 			// Re-enable this button
+			document.getElementById('randomButton').title = "Random initial condition.";
+			document.getElementById('randomButton').disabled = false;
+			document.getElementById('resetButton').title = "Reset infection status.";
+			document.getElementById('resetButton').disabled = false;
 			document.getElementById('runButton').title = "Start epidemics!";
 			document.getElementById('runButton').disabled = false;
-			document.getElementById('resetButton').title = "Start epidemics!";
-			document.getElementById('resetButton').disabled = false;
-			epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped after ' + (roundNo - 2) + ' rounds.';
+			epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped after '
+				+ (roundNo - 2) + ' rounds.';
+			epidemicsStatus.style.color = '#000000';
 		}
 	}, 1000);
 }
@@ -134,6 +150,9 @@ function randomButton() {
 		hexagons[i].infected = false;
 		hexagons[i].style.fill = '#ffffff';
 		}
+	document.getElementById('epidemicsStatus').innerText
+		= "Status: (Idle) Infection status has been set to random.";
+
 }
 
 // 'onclick' event hanlder for 'Reset' button
@@ -144,7 +163,8 @@ function resetButton_click() {
 		hexagons[i].infected = false;
 		hexagons[i].style.fill = '#ffffff';
 	}
-	alert('Infection has been reset.');
+	document.getElementById('epidemicsStatus').innerText
+		= "Status: (Idle) Infection status has been reset.";
 }
 
 /*
