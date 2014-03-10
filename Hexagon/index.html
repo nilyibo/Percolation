@@ -4,18 +4,33 @@
     <meta charset="utf-8">
     <title>Percolation - Hexagon</title>
     <link rel="stylesheet" type="text/css" href="./css/WinJS-ui-light.css">
+    <style type="text/css">
+      td {
+        text-align: center;
+      }
+    </style>
   </head>
 
   <body style="overflow-y: scroll;">
     <section>
       <div id="control-container" style="margin-top: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e3e3e3;">
-        <table width="1200px">
+        <table width="1000px">
           <tr>
-            <td width="16.67%"><button id="runButton" onclick="runButton_click()" tabindex="1">Run</button></td>
-            <td width="16.67%"><button id="resetButton" onclick="resetButton_click()" tabindex="2">Reset</button></td>
-            <td width="16.67%">Threshold:</td>
-            <td width="16.67%">
-              <select id="thresholdSelect" onchange="thresholdSelect_changed()"  tabindex="3">
+            <td width="14%">
+              <button id="runButton" title="Start the epidemics!"
+                  onclick="runButton_click()" tabindex="1">Run</button>
+            </td>
+            <td width="14%">
+              <button id="randomButton" title="Random initial condition."
+                  onclick="randomButton()" tabindex="2">Random</button>
+            </td>
+            <td width="14%">
+              <button id="resetButton" title="Reset infection status."
+                  onclick="resetButton_click()" tabindex="3">Reset</button>
+            </td>
+            <td width="29%">
+              Threshold:
+              <select id="thresholdSelect" title="Threshold for all hexagons." onchange="thresholdSelect_changed()"  tabindex="4">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -24,8 +39,8 @@
                 <option>6</option>
               </select>
             </td>
-            <td width="33.32%">
-                <div id="epidemicsStatus">Status: (Idle)</div>
+            <td width="29%">
+              <div id="epidemicsStatus">Status: (Idle)</div>
             </td>
           </tr>
         </table>

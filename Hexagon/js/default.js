@@ -112,6 +112,30 @@ function runButton_click() {
 	}, 1000);
 }
 
+// 'onclick' event hanlder for 'Random' button
+// Functionality: randomly infect some hexagons
+function randomButton() {
+	var inputNumber = prompt(
+		"Please enter a probability to randomly infect all hexagons.", "0.5");
+	var probability = Number(inputNumber);
+
+	if (isNaN(probability) || probability < 0 || probability > 1)
+	{
+		alert("Illegal probability!");
+	}
+	for (var i = 0; i < hexagons.length; ++i)
+		if (Math.random() < probability)
+		{
+			hexagons[i].infected = true;
+			hexagons[i].style.fill = '#ff0000';
+		}
+		else
+		{
+		hexagons[i].infected = false;
+		hexagons[i].style.fill = '#ffffff';
+		}
+}
+
 // 'onclick' event hanlder for 'Reset' button
 // Functionality: reset infection status for all hexagons
 function resetButton_click() {
