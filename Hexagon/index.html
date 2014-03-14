@@ -262,8 +262,7 @@
   <script type="text/javascript">
     window.onload = function() {
       initHexagonGrid();
-      var thres = document.getElementById('thresholdSelect');
-      globalThreshold = thres.options[thres.selectedIndex].value;
+      globalThreshold = document.getElementById('thresholdSelect').value;
     };
     var numRows = 10, numColumns = 20, columnInterval = 20;
   </script>
