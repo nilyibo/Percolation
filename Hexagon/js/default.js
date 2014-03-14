@@ -11,7 +11,7 @@ var hexagons;	// Holds the list of all polygons
 // global init function
 function initHexagonGrid() {
 	// Init global variable hexagons
-	hexagons = document.getElementById('hexes').children;
+	hexagons = document.getElementsByTagName('polygon');
 	// Add onclick event handler for all hexagons
 	for (var i = 0; i < hexagons.length; ++i)
 	{
@@ -80,7 +80,7 @@ function runButton_click() {
 	var intervalID, roundNo = 1;
 
 	intervalID = setInterval(function() {
-		epidemicsStatus.innerText = 'Status: (Running) Round ' + roundNo + '.';
+		epidemicsStatus.innerHTML = 'Status: (Running) Round ' + roundNo + '.';
 		oneRoundSpread();
 		prevInfectionStatus = currInfectionStatus;
 		currInfectionStatus = getInfectionStatus();
@@ -121,7 +121,7 @@ function runButton_click() {
 			document.getElementById('resetButton').disabled = false;
 			document.getElementById('runButton').title = "Start epidemics!";
 			document.getElementById('runButton').disabled = false;
-			epidemicsStatus.innerText = 'Status: (Idle) Epidemics stopped after '
+			epidemicsStatus.innerHTML = 'Status: (Idle) Epidemics stopped after '
 				+ (roundNo - 2) + ' rounds.';
 			epidemicsStatus.style.color = '#000000';
 		}
@@ -150,7 +150,7 @@ function randomButton() {
 		hexagons[i].infected = false;
 		hexagons[i].style.fill = '#ffffff';
 		}
-	document.getElementById('epidemicsStatus').innerText
+	document.getElementById('epidemicsStatus').innerHTML
 		= "Status: (Idle) Infection status has been set to random.";
 
 }
@@ -163,7 +163,7 @@ function resetButton_click() {
 		hexagons[i].infected = false;
 		hexagons[i].style.fill = '#ffffff';
 	}
-	document.getElementById('epidemicsStatus').innerText
+	document.getElementById('epidemicsStatus').innerHTML
 		= "Status: (Idle) Infection status has been reset.";
 }
 
