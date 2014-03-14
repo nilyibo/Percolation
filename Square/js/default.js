@@ -1,7 +1,7 @@
 var globalThreshold = 1; // Initial threshold for all nodes
 
 // global init function
-function initHSquareGrid()
+function initSquareGrid()
 {
 	;
 }
