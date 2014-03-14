@@ -260,7 +260,11 @@
 
   <script src="./js/default.js"></script>   <!-- functions used for hexagon infection model -->
   <script type="text/javascript">
-    window.onload = initHexagonGrid();
+    window.onload = function() {
+        initHexagonGrid();
+        var thres = document.getElementById('thresholdSelect');
+        globalThreshold = thres.options[thres.selectedIndex].value;
+    };
     var numRows = 10, numColumns = 20, columnInterval = 20;
   </script>
 

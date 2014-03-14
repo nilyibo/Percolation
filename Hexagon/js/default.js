@@ -57,7 +57,7 @@ function thresholdSelect_changed() {
 // 'onclick' event hanlder for 'Run' button
 // Functionality: Start the spread of epidemics.
 function runButton_click() {
-	epidemicsStatus.innerText = 'Status: (Running) Epidemics started';
+	epidemicsStatus.innerHTML = 'Status: (Running) Epidemics started';
 	epidemicsStatus.style.color = '#ff0000';
 	// Disable the button itself to prevent multiple epidemics running
 	document.getElementById('runButton').disabled = true;
