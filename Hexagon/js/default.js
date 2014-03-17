@@ -228,7 +228,6 @@ function mixColor(color1, color2, percentage) {
 */
 
 // Core function to simulate one round of epidemics spread
-// This also updates currInfectionStatus
 function oneRoundSpread() {
 	var nextRoundInfected = [];
 	for (var i = 0; i < hexagons.length; ++i)
