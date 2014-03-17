@@ -130,7 +130,7 @@ function runButton_click() {
 
 // 'onclick' event hanlder for 'Random' button
 // Functionality: randomly infect some hexagons
-function randomButton() {
+function randomButton_click() {
 	var inputNumber = prompt(
 		"Please enter a probability to randomly infect all hexagons.", "0.5");
 	var probability = Number(inputNumber);
@@ -147,8 +147,8 @@ function randomButton() {
 		}
 		else
 		{
-		hexagons[i].infected = false;
-		hexagons[i].style.fill = '#ffffff';
+			hexagons[i].infected = false;
+			hexagons[i].style.fill = '#ffffff';
 		}
 	document.getElementById('epidemicsStatus').innerHTML
 		= "Status: (Idle) Infection status has been set to random.";
@@ -245,8 +245,7 @@ function oneRoundSpread() {
 }
 
 // This function returns the number of infected neighbors
-function countInfectedNeighbors(hexagon)
-{
+function countInfectedNeighbors(hexagon) {
 	var neighborsId = getNeighborsId(hexagon);
 	var count = 0;
 	for (var i = 0; i < hexagons.length; ++i)
@@ -257,8 +256,7 @@ function countInfectedNeighbors(hexagon)
 }
 
 // Get the list of the given node's neighbors's id
-function getNeighborsId(hexagon)
-{
+function getNeighborsId(hexagon) {
 	var currId = parseInt(hexagon.id);
 	if (isNaN(currId))
 		return [];
@@ -297,8 +295,7 @@ function getNeighborsId(hexagon)
 
 // This function calculates the id based on row and column
 // Returns -1 on error (out of bound, etc)
-function getId(row, column)
-{
+function getId(row, column) {
 	if (row < 0 || row >= numRows || column < 0 || column >= numColumns)
 		return -1;
 	return row + column * columnInterval;
