@@ -11,7 +11,7 @@
     </style>
   </head>
 
-  <body style="overflow-y: scroll;">
+  <body style="overflow: scroll;">
     <section id="about">
       <p>
         This is a square grid face model of <a href="../index.html">Epidemic Graph</a>.
@@ -28,7 +28,7 @@
             </td>
             <td width="14%">
               <button id="randomButton" title="Random initial condition."
-                  onclick="randomButton()" tabindex="2">Random</button>
+                  onclick="randomButton_click()" tabindex="2">Random</button>
             </td>
             <td width="14%">
               <button id="resetButton" title="Reset infection status."
@@ -54,8 +54,11 @@
     </section>
 
     <section>
-      <div id="graph-container">
-        <svg></svg>
+      <div id="graph-container" style="margin-left: 20px;">
+        <svg width="1401" height="701" xmlns="http://www.w3.org/2000/svg" version="1.1">
+          <desc>Square grid</desc>
+          <g id="sqs"></g>
+        </svg>
       </div>
     </section>
 
@@ -78,6 +81,7 @@
 
   <script src="./js/default.js"></script>   <!-- functions used for square infection model -->
   <script type="text/javascript">
+    var numRows = 10, numColumns = 20, columnInterval = 20;
     window.onload = function() {
         initSquareGrid();
         globalThreshold = document.getElementById('thresholdSelect').value;
