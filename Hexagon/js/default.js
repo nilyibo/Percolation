@@ -163,6 +163,8 @@ function resetButton_click() {
 		hexagons[i].infected = false;
 		hexagons[i].style.fill = '#ffffff';
 	}
+	document.getElementById('thresholdSelect').selectedIndex = 0;
+	thresholdSelect_changed();
 	document.getElementById('epidemicsStatus').innerHTML
 		= "Status: (Idle) Infection status has been reset.";
 }
