@@ -95,11 +95,15 @@ function run_click() {
     }, 1000);
 }
 
-// This is the onclick event hanlder for 'Vaccinate' button
+// This is the onclick event hanlder for 'Reset' button
 // Functionality: Set all nodes' infection status to not infected.
-function vaccinate_click() {
+function reset_click() {
     for (var i = 0; i < nodes.length; ++i)
+    {
         nodes[i].infected = false;
+        nodes[i].threshold = 1;
+    }
+    updateSelectOptions();
     restart();
 }
 
