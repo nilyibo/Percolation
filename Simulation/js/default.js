@@ -42,7 +42,12 @@ function runButton_click() {
 	var status = document.getElementById('status');
 	status.style.color = '#00ff33';
 	status.innerHTML = 'Simulation started.';
-	// TODO: start running simulation
+
+	var steps = simulation();
+
+	status.style.color = '#000000';
+	status.innerHTML = 'Simulation ended.';
+	alert('average steps: ' + steps);
 }
 
 function nSelect_changed() {
@@ -80,6 +85,14 @@ function rSelect_changed() {
 function inputKeyDown(event) {
 	if (event.keyCode == 13)	// 'Enter' key
 		document.getElementById('runButton').click();
+}
+
+/**
+ * Simulation function
+ */
+
+function simulation() {
+	return 0;
 }
 
 /**
