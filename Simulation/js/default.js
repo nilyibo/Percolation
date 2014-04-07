@@ -35,11 +35,21 @@ function initPage() {
  */
 
 function runButton_click() {
-	var errorCode = inputParams();
-	if (errorCode == -1)
+	if (inputParams() == -1)
 		return;
 
-	// TODO: Disable parameter change
+	var inputs = [
+		document.getElementById('nSelect'),
+		document.getElementById('rSelect'),
+		document.getElementById('pInput'),
+		document.getElementById('rowInput'),
+		document.getElementById('columnInput'),
+		document.getElementById('simulationInput')
+	];
+
+	// Disable parameter change
+	for (var i = inputs.length - 1; i >= 0; i--)
+		inputs[i].disabled = true;
 
 	var status = document.getElementById('status');
 	status.style.color = '#00ff33';
@@ -47,7 +57,9 @@ function runButton_click() {
 
 	var steps = simulation();
 
-	// TODO: Enable parameter change
+	// Enable parameter change
+	for (var i = inputs.length - 1; i >= 0; i--)
+		inputs[i].disabled = false;
 
 	status.style.color = '#000000';
 	status.innerHTML = 'Simulation ended.';
