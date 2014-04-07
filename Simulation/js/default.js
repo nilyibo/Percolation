@@ -15,7 +15,7 @@ var params = {	// Default parameter
 	p: 0.5,
 	rows: 10,
 	columns: 10,
-	rounds: 1000
+	simulations: 1000
 };
 
 function initPage() {
@@ -39,11 +39,15 @@ function runButton_click() {
 	if (errorCode == -1)
 		return;
 
+	// TODO: Disable parameter change
+
 	var status = document.getElementById('status');
 	status.style.color = '#00ff33';
 	status.innerHTML = 'Simulation started.';
 
 	var steps = simulation();
+
+	// TODO: Enable parameter change
 
 	status.style.color = '#000000';
 	status.innerHTML = 'Simulation ended.';
@@ -91,8 +95,83 @@ function inputKeyDown(event) {
  * Simulation function
  */
 
+// Run the whole simulation
 function simulation() {
+	var progress = document.getElementById('progressbar').children[0];
+	var sum = 0;
+	for (var i = 0; i < params.simulations; ++i)
+	{
+		sum += oneSimulation();
+		progress.style.width = Math.ceil(i * 100 / params.simulations) + '%';
+		var status = document.getElementById('status');
+		status.innerHTML = 'Simulations completed: ' + i;
+	}
+	return sum / params.simulations;
+}
+
+// Random initial seed
+function buildGrid() {
+	var grid = [];
+	for (var i = 0; i < params.rows; ++i)
+	{
+		grid.push([]);
+		for (var j = 0; j < params.columns; ++j)
+			if (Math.random() < params.p)
+				grid[i].push(true);
+			else
+				grid[i].push(false);
+	}
+	return grid;
+}
+
+// Run one simulation
+function oneSimulation() {
+	var grid = buildGrid();
+	var oldGrid = [];
+	var rounds = 0;
+
+	while (true)
+	{
+		oldGrid = grid;
+		oneRound();
+		if (compareGrid(grid, oldGrid))
+			break;
+		++counter;
+	}
 	return 0;
+}
+
+// One round of infection spread, updates grid
+function oneRound() {
+	;
+}
+
+function copyGrid(grid) {
+	var result = [];
+	for (var i = 0; i < grid.length; ++i)
+	{
+		result.push([]);
+		for (var j = 0; j < grid[i].length; ++j)
+			result[i].push(grid[i][j]);
+	}
+	return result;
+}
+
+// Check whether two grids have the same infection status
+function compareGrid(grid1, grid2) {
+	if (grid1.length != grid2.length)
+		return false;
+
+	for (var i = 0; i < grid1.length; ++i)
+	{
+		if (grid1[i].length != grid2[i].length)
+			return false;
+		for (var j = 0; j < grid1[i].length; ++j)
+			if (grid1[i][j] != grid2[i][j])
+				return false;
+	}
+
+	return true;
 }
 
 /**
@@ -103,7 +182,7 @@ function inputParams() {
 	var pInput = document.getElementById('pInput');
 	var rowInput = document.getElementById('rowInput');
 	var columnInput = document.getElementById('columnInput');
-	var roundInput = document.getElementById('roundInput');
+	var simulationInput = document.getElementById('simulationInput');
 
 	var p = parseFloat(pInput.value);
 	if (isNaN(p) || p < 0 || p > 1)
@@ -132,14 +211,14 @@ function inputParams() {
 	else
 		params.columns = columns;
 
-	var rounds = parseInt(roundInput.value);
-	if (isNaN(rounds) || rounds <= 0)
+	var simulations = parseInt(simulationInput.value);
+	if (isNaN(simulations) || simulations <= 0)
 	{
-		inputWarning('roundInput');
+		inputWarning('simulationInput');
 		return -1;
 	}
 	else
-		params.rounds = rounds;
+		params.simulations = simulations;
 
 	return 0;	// No error in parameters
 }
