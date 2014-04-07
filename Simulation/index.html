@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Percolation - Simulation</title>
+    <link rel="stylesheet" type="text/css" href="../css/WinJS-ui-light.css">
+    <style type="text/css">
+      td {
+        text-align: center;
+      }
+      #progressbar {
+        background-color: gray;
+        border-radius: 13px; /* (height of inner div) / 2 + padding */
+        padding: 3px;
+      }
+
+      #progressbar > div {
+         background-color: white;
+         width: 40%; /* Adjust with JavaScript */
+         height: 20px;
+         border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body style="overflow-y: scroll;">
+    <div id="page-container" style="width: 962px; position: relative; margin: 0 auto;">
+      <section id="about">
+        <h2>About</h2>
+        <p>This is a simulation of number of infection steps in percolation on regular lattice.</p>
+      </section>
+
+      <section id="app" width="960px" height="480px" style="position: relative; overflow: hidden;">
+        <h2>App</h2>
+        <div id="app-body" width="960px" height="480px"
+            style="position: relative; overflow: hidden; border: 1px solid #e3e3e3; border-radius: 4px;">
+          <div>
+            <p>Function parameters:</p>
+            <table width="960px">
+              <tr>
+                <td width="33%">
+                  n:
+                  <select id="nSelect" onchange="nSelect_changed()" tabindex="1">
+                    <option>4</option>
+                    <option>6</option>
+                  </select>
+                </td>
+                <td width="33%">
+                  r:
+                  <select id="nSelect" onchange="nSelect_changed()" tabindex="2"></select>
+                </td>
+                <td width="33%">
+                  p:
+                  <input type="number" min="0" max="1" step="0.01" style="width: 100px;">
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div>
+            <p>Other paramters:</p>
+            <table width="960px">
+              <tr>
+                <td width="33%">
+                  # of rows:
+                  <input type="number" min="0" style="width: 100px;">
+                </td>
+                <td width="33%">
+                  # of columns:
+                  <input type="number" min="0" style="width: 100px;">
+                </td>
+                <td width="34%">
+                  # of simulations:
+                  <input type="number" min="0" style="width: 100px;">
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <br>
+
+          <div>
+            <table width="960px">
+              <tr>
+                <td width="33%">
+                  <button id="runButton" title="Start simulation" click="runButton_click()">Run</button>
+                </td>
+                <td width="33%">
+                  <div id="progressbar">
+                    <div></div>
+                  </div>
+                </td>
+                <td width="33%">
+                  Time left: 0s
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </section>
+      <br>
+
+      <section id="details">
+        <h2>Detailed information</h2>
+        <p>Define number of steps to terminal state as N = N(n, r, p).</p>
+        <ul>
+          <li>n: side per face</li>
+          <li>r: Infection threshold</li>
+          <li>p: probability for a face to be initialy infected</li>
+        </ul>
+        <p>Simulation will help us find the expected value of N for specific n, r and p.</p>
+      </section>
+
+      <section id="pageFooter">
+        <div id="contentCurve" style="border-bottom: 1px solid #ccc; font-size: 1px; height: 8px; margin-bottom: 8px;"></div>
+        <div id="copyright" style="margin-top: 20px; margin-bottom: 20px; color: gray;">
+          <span> Yibo G © 2014</span>
+          <a title="View on github" href="https://github.com/nilyibo/Percolation">Percolation Project</a>
+        </div>
+      </section>
+    </div>
+  </body>
+
+  <script src="./js/default.js"></script>   <!-- functions used for hexagon infection model -->
+  <script type="text/javascript">
+    
+    window.onload = function() {
+
+    };
+  </script>
+
+</html>
