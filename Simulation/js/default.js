@@ -10,17 +10,22 @@
  */
 
 var params = {	// Default parameter
-	n: 4,
-	r: 1,
-	p: 0.5,
+	n: 6,
+	r: 3,
+	pmin: 0,
+	pmax: 1,
+	pstep: 0.01,
 	rows: 10,
 	columns: 10,
 	simulations: 1000
 };
 
+var gridChanged = false;
+
 function initPage() {
 	var nSelect = document.getElementById('nSelect');
 	var rSelect = document.getElementById('rSelect');
+	nSelect.selectedIndex = 1;
 	var n = parseInt(nSelect.options[nSelect.selectedIndex].value);
 	for(var i = 0; i < n; ++i)
 	{
@@ -28,6 +33,7 @@ function initPage() {
 		option.text = i + 1;
 		rSelect.options.add(option);
 	}
+	rSelect.selectedIndex = 2;
 }
 
 /**
@@ -41,7 +47,9 @@ function runButton_click() {
 	var inputs = [
 		document.getElementById('nSelect'),
 		document.getElementById('rSelect'),
-		document.getElementById('pInput'),
+		document.getElementById('pminInput'),
+		document.getElementById('pmaxInput'),
+		document.getElementById('pstepInput'),
 		document.getElementById('rowInput'),
 		document.getElementById('columnInput'),
 		document.getElementById('simulationInput')
@@ -55,7 +63,13 @@ function runButton_click() {
 	status.style.color = '#00ff33';
 	status.innerHTML = 'Simulation started.';
 
-	var steps = simulation();
+	var fileContent = 'p, N\n';
+	for (var i = params.pmin; i < params.pmax; i += params.pstep) {
+		var steps = simulation(i);
+		fileContent += (i + ', ' + steps + '\n');
+	};
+
+	downloadFile(fileContent);
 
 	// Enable parameter change
 	for (var i = inputs.length - 1; i >= 0; i--)
@@ -103,17 +117,30 @@ function inputKeyDown(event) {
 		document.getElementById('runButton').click();
 }
 
+// Functionality: save the calculation result
+function downloadFile(fileContent) {
+    var download = window.document.createElement('a');
+    download.href = window.URL.createObjectURL(new Blob([fileContent], {type: 'text/plain;charset=utf-8;'}));
+    download.download = 'N(p).csv';    // File name
+
+    // Append anchor to body temporarily to initiate download
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
+}
+
+
 /**
  * Simulation function
  */
 
 // Run the whole simulation
-function simulation() {
+function simulation(p) {
 	var progress = document.getElementById('progressbar').children[0];
 	var sum = 0;
 	for (var i = 0; i < params.simulations; ++i)
 	{
-		sum += oneSimulation();
+		sum += oneSimulation(p);
 		progress.style.width = Math.ceil(i * 100 / params.simulations) + '%';
 		var status = document.getElementById('status');
 		status.innerHTML = 'Simulations completed: ' + i;
@@ -122,13 +149,13 @@ function simulation() {
 }
 
 // Random initial seed
-function buildGrid() {
+function buildGrid(p) {
 	var grid = [];
 	for (var i = 0; i < params.rows; ++i)
 	{
 		grid.push([]);
 		for (var j = 0; j < params.columns; ++j)
-			if (Math.random() < params.p)
+			if (Math.random() < p)
 				grid[i].push(true);
 			else
 				grid[i].push(false);
@@ -137,16 +164,17 @@ function buildGrid() {
 }
 
 // Run one simulation
-function oneSimulation() {
-	var grid = buildGrid();
+function oneSimulation(p) {
+	var grid = buildGrid(p);
 	var oldGrid = [];
 	var counter = 0;
 
 	while (true)
 	{
 		oldGrid = grid;
+		gridChanged = false;
 		grid = oneRound(grid);
-		if (compareGrid(grid, oldGrid))
+		if (!gridChanged)
 			break;
 		++counter;
 	}
@@ -160,8 +188,13 @@ function oneRound(grid) {
 	{
 		newGrid.push([]);
 		for (var j = 0; j < grid[0].length; ++j)
-			if (grid[i][j] || countInfectedNeighbor(grid, i, j) >= params.r)
+			if (grid[i][j])
 				newGrid[i].push(true);
+			else if (countInfectedNeighbor(grid, i, j) >= params.r)
+			{
+				newGrid[i].push(true);
+				gridChanged = true;
+			}
 			else
 				newGrid[i].push(false);
 	}
@@ -265,19 +298,39 @@ function countInfectedNeighbor(grid, x, y) {
  */
 
 function inputParams() {
-	var pInput = document.getElementById('pInput');
+	var pminInput = document.getElementById('pminInput');
+	var pmaxInput = document.getElementById('pmaxInput');
+	var pstepInput = document.getElementById('pstepInput');
 	var rowInput = document.getElementById('rowInput');
 	var columnInput = document.getElementById('columnInput');
 	var simulationInput = document.getElementById('simulationInput');
 
-	var p = parseFloat(pInput.value);
-	if (isNaN(p) || p < 0 || p > 1)
+	var pmin = parseFloat(pminInput.value);
+	if (isNaN(pmin) || pmin < 0 || pmin > 1)
 	{
-		inputWarning('pInput');
+		inputWarning('pminInput');
 		return -1;
 	}
 	else
-		params.p = p;
+		params.pmin = pmin;
+
+	var pmax = parseFloat(pmaxInput.value);
+	if (isNaN(pmax) || pmax < 0 || pmax > 1)
+	{
+		inputWarning('pmaxInput');
+		return -1;
+	}
+	else
+		params.pmax = pmax;
+
+	var pstep = parseFloat(pstepInput.value);
+	if (isNaN(pstep) || pstep < 0 || pstep > 1)
+	{
+		inputWarning('pstepInput');
+		return -1;
+	}
+	else
+		params.pstep = pstep;
 
 	var rows = parseInt(rowInput.value);
 	if (isNaN(rows) || rows <= 0)

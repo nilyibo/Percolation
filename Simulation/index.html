@@ -39,21 +39,31 @@
             <p>Function parameters:</p>
             <table width="798px">
               <tr>
-                <td width="33%">
+                <td width="20%">
                   n:
                   <select id="nSelect" onchange="nSelect_changed()" tabindex="1">
                     <option>4</option>
                     <option>6</option>
                   </select>
                 </td>
-                <td width="33%">
+                <td width="20%">
                   r:
                   <select id="rSelect" onchange="rSelect_changed()" tabindex="2"></select>
                 </td>
-                <td width="33%">
-                  p:
-                  <input id="pInput" type="number" min="0" max="1" step="0.01"
-                    value="0.5" onkeydown="inputKeyDown(event);" style="width: 100px;" tabindex="3">
+                <td width="20%">
+                  p min:
+                  <input id="pminInput" type="number" min="0" max="1" step="0.01"
+                    value="0" onkeydown="inputKeyDown(event);" style="width: 100px;" tabindex="3">
+                </td>
+                <td width="20%">
+                  p max:
+                  <input id="pmaxInput" type="number" min="0" max="1" step="0.01"
+                    value="1" onkeydown="inputKeyDown(event);" style="width: 100px;" tabindex="3">
+                </td>
+                <td width="20%">
+                  p step:
+                  <input id="pstepInput" type="number" min="0" max="1" step="0.01"
+                    value="0.01" onkeydown="inputKeyDown(event);" style="width: 100px;" tabindex="3">
                 </td>
               </tr>
             </table>
