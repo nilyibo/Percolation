@@ -24,19 +24,19 @@
   </head>
 
   <body style="overflow-y: scroll;">
-    <div id="page-container" style="width: 962px; position: relative; margin: 0 auto;">
+    <div id="page-container" style="width: 800px; position: relative; margin: 0 auto;">
       <section id="about">
         <h2>About</h2>
         <p>This is a simulation of number of infection steps in percolation on regular lattice.</p>
       </section>
 
-      <section id="app" width="960px" height="480px" style="position: relative; overflow: hidden;">
+      <section id="app" width="798px" height="480px" style="position: relative; overflow: hidden;">
         <h2>App</h2>
-        <div id="app-body" width="960px" height="480px"
+        <div id="app-body" width="798px"
             style="position: relative; overflow: hidden; border: 1px solid #e3e3e3; border-radius: 4px;">
-          <div>
+          <div style="border-bottom: 1px solid #ccc;">
             <p>Function parameters:</p>
-            <table width="960px">
+            <table width="798px">
               <tr>
                 <td width="33%">
                   n:
@@ -47,31 +47,38 @@
                 </td>
                 <td width="33%">
                   r:
-                  <select id="nSelect" onchange="nSelect_changed()" tabindex="2"></select>
+                  <select id="rSelect" onchange="rSelect_changed()" tabindex="2"></select>
                 </td>
                 <td width="33%">
                   p:
-                  <input type="number" min="0" max="1" step="0.01" style="width: 100px;">
+                  <input id="pInput" type="number" min="0" max="1" step="0.01"
+                    value="0.5" onkeydown="inputKeyDown(event);" style="width: 100px;" tabindex="3">
                 </td>
               </tr>
             </table>
           </div>
 
-          <div>
+          <div style="border-bottom: 1px solid #ccc;">
             <p>Other paramters:</p>
-            <table width="960px">
+            <table width="798px">
               <tr>
                 <td width="33%">
                   # of rows:
-                  <input type="number" min="0" style="width: 100px;">
+                  <input id="rowInput" type="number" min="0" value="10"
+                    onkeydown="inputKeyDown(event);" style="width: 100px;"
+                    tabindex="4">
                 </td>
                 <td width="33%">
                   # of columns:
-                  <input type="number" min="0" style="width: 100px;">
+                  <input id="columnInput" type="number" min="0" value="10"
+                    onkeydown="inputKeyDown(event);" style="width: 100px;"
+                    tabindex="5">
                 </td>
                 <td width="34%">
                   # of simulations:
-                  <input type="number" min="0" style="width: 100px;">
+                  <input id="roundInput" type="number" min="0" value="1000"
+                    onkeydown="inputKeyDown(event);" style="width: 100px;"
+                    tabindex="6">
                 </td>
               </tr>
             </table>
@@ -80,10 +87,10 @@
           <br>
 
           <div>
-            <table width="960px">
+            <table width="798px">
               <tr>
                 <td width="33%">
-                  <button id="runButton" title="Start simulation" click="runButton_click()">Run</button>
+                  <button id="runButton" title="Start simulation" onclick="runButton_click()" tabindex="7">Run</button>
                 </td>
                 <td width="33%">
                   <div id="progressbar">
@@ -91,7 +98,9 @@
                   </div>
                 </td>
                 <td width="33%">
-                  Time left: 0s
+                  <div id="status">
+                    Time left: 0s
+                  </div>
                 </td>
               </tr>
             </table>
@@ -121,11 +130,10 @@
     </div>
   </body>
 
-  <script src="./js/default.js"></script>   <!-- functions used for hexagon infection model -->
+  <script src="./js/default.js"></script>   <!-- functions used for simulation -->
   <script type="text/javascript">
-    
     window.onload = function() {
-
+      initPage();
     };
   </script>
 
