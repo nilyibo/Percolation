@@ -203,15 +203,46 @@ function countInfectedNeighbor(grid, x, y) {
 	{
 		// Assume in hexagon grid,
 		// odd columns are half above even columns
+
+		var count = 0;
+
+		// Same for odd and even
+		if (x > 0)
+			count += (grid[x - 1][y]) ? 1 : 0;
+		if (x + 1 < params.rows)
+			count += (grid[x + 1][y]) ? 1 : 0;
+
 		if (y % 2 == 0) // Odd column
 		{
-			;
+			if (y > 0)
+			{
+				count += (grid[x][y - 1]) ? 1 : 0;
+				if (x > 0)
+					count += (grid[x - 1][y - 1]) ? 1 : 0;
+			}
+			if (y + 1 < params.columns)
+			{
+				count += (grid[x][y + 1]) ? 1 : 0;
+				if (x > 0)
+					count += (grid[x - 1][y + 1]) ? 1 : 0;
+			}
 		}
 		else	// Even column
 		{
-			;
+			if (y > 0)
+			{
+				count += (grid[x][y - 1]) ? 1 : 0;
+				if (x + 1 < params.rows)
+					count += (grid[x + 1][y - 1]) ? 1 : 0;
+			}
+			if (y + 1 < params.columns)
+			{
+				count += (grid[x][y + 1]) ? 1 : 0;
+				if (x + 1 < params.rows)
+					count += (grid[x + 1][y + 1]) ? 1 : 0;
+			}
 		}
-		return 0; // TODO: change this
+		return count;
 	}
 	else	// Shouldn't happen
 		return 0;
