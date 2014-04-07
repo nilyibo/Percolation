@@ -128,22 +128,33 @@ function buildGrid() {
 function oneSimulation() {
 	var grid = buildGrid();
 	var oldGrid = [];
-	var rounds = 0;
+	var counter = 0;
 
 	while (true)
 	{
 		oldGrid = grid;
-		oneRound();
+		grid = oneRound(grid);
 		if (compareGrid(grid, oldGrid))
 			break;
 		++counter;
 	}
-	return 0;
+	return counter;
 }
 
 // One round of infection spread, updates grid
-function oneRound() {
-	;
+function oneRound(grid) {
+	var newGrid = [];
+	for (var i = 0; i < grid.length; ++i)
+	{
+		newGrid.push([]);
+		for (var j = 0; j < grid[0].length; ++j)
+			if (grid[i][j] || countInfectedNeighbor(grid, i, j) >= params.r)
+				newGrid[i].push(true);
+			else
+				newGrid[i].push(false);
+	}
+
+	return newGrid;
 }
 
 function copyGrid(grid) {
@@ -172,6 +183,38 @@ function compareGrid(grid1, grid2) {
 	}
 
 	return true;
+}
+
+function countInfectedNeighbor(grid, x, y) {
+	if (params.n == 4)	// Square grid
+	{
+		var count = 0;
+		if (x > 0)
+			count += (grid[x - 1][y]) ? 1 : 0;
+		if (y > 0)
+			count += (grid[x][y - 1]) ? 1 : 0;
+		if (x + 1 < params.rows)
+			count += (grid[x + 1][y]) ? 1 : 0;
+		if (y + 1 < params.columns)
+			count += (grid[x][y + 1]) ? 1 : 0;
+		return count;
+	}
+	else if (params.n == 6)	// Hexagon grid
+	{
+		// Assume in hexagon grid,
+		// odd columns are half above even columns
+		if (y % 2 == 0) // Odd column
+		{
+			;
+		}
+		else	// Even column
+		{
+			;
+		}
+		return 0; // TODO: change this
+	}
+	else	// Shouldn't happen
+		return 0;
 }
 
 /**
