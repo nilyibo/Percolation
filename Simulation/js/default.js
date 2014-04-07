@@ -63,7 +63,7 @@ function runButton_click() {
 	status.style.color = '#00ff33';
 	status.innerHTML = 'Simulation started.';
 
-	var fileContent = 'p, N\n';
+	var fileContent = 'p, N, SD\n';
 	for (var i = params.pmin; i < params.pmax; i += params.pstep) {
 		var result = simulation(i);
 		var steps = result.avg;
