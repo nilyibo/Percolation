@@ -65,8 +65,10 @@ function runButton_click() {
 
 	var fileContent = 'p, N\n';
 	for (var i = params.pmin; i < params.pmax; i += params.pstep) {
-		var steps = simulation(i);
-		fileContent += (i + ', ' + steps + '\n');
+		var result = simulation(i);
+		var steps = result.avg;
+		var sd = result.sd;
+		fileContent += (i + ', ' + steps + ', ' + sd + '\n');
 	};
 
 	downloadFile(fileContent);
@@ -137,15 +139,23 @@ function downloadFile(fileContent) {
 // Run the whole simulation
 function simulation(p) {
 	var progress = document.getElementById('progressbar').children[0];
+	var count = params.simulations;
 	var sum = 0;
-	for (var i = 0; i < params.simulations; ++i)
+	var squareSum = 0;
+	for (var i = 0; i < count; ++i)
 	{
-		sum += oneSimulation(p);
-		progress.style.width = Math.ceil(i * 100 / params.simulations) + '%';
+		var step = oneSimulation(p);
+		sum += step;
+		squareSum += step * step;
+		progress.style.width = Math.ceil(i * 100 / count) + '%';
 		var status = document.getElementById('status');
 		status.innerHTML = 'Simulations completed: ' + i;
 	}
-	return sum / params.simulations;
+
+	return {
+		avg: sum / count,
+		sd: Math.sqrt(squareSum / count - sum / count * sum / count)
+	};
 }
 
 // Random initial seed
