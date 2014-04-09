@@ -41,7 +41,7 @@ int countInfectedNeighbor(bool ** grid, int x, int y, int size)
 		count += (grid[x][y + 1]) ? 1 : 0;
 #elif n == 6
 	// Assume in hexagon grid,
-	// odd size are half above even size
+	// odd column are half above even column
 
 	// Same for both odd and even
 	if (x > 0)
@@ -159,7 +159,7 @@ int main()
 	double startTime = time(NULL);
 	clock_t t = clock();
 
-#pragma omp parallel for num_threads(8)
+#pragma omp parallel for num_threads(4)
 	for (int size = sizemin; size <= sizemax; size += sizestep)
 	{
 		srand(static_cast<unsigned int>(time(NULL)) ^ omp_get_thread_num());
@@ -204,10 +204,10 @@ int main()
 	double seconds = difftime(time(NULL), startTime);
 	output << "\nProcessor time: "
 		<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
-	output << "\n Wall time: " << seconds << "s." << endl;
+	output << "Wall time: " << seconds << "s." << endl;
 	cout << "\nProcessor time: "
 		<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
-	cout << "\n Wall time: " << seconds << "s." << endl;
+	cout << "Wall time: " << seconds << "s." << endl;
 
 	return 0;
 }
