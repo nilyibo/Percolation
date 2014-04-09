@@ -9,7 +9,6 @@
 #include <time.h>
 #include <iostream>
 #include <cmath>
-#include <vector>
 using namespace std;
 
 // Parameters
