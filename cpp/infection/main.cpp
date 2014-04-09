@@ -9,21 +9,29 @@
 #include <time.h>
 #include <iostream>
 #include <cmath>
-#include <omp.h>
+//#include <omp.h>
 using namespace std;
 
 // Parameters
 #define	n	6	// side per face
 #define	r	3	// infection threhold
-#define	pmin	0.03
-#define	pmax	0.16
-#define	pstep	0.005
-
-#define rows 100
-#define columns 100
+#define	pmin	0.0
+#define	pmax	0.5
+#define	pstep	0.05
 #define simulations 1000
 
-int countInfectedNeighbor(bool grid[rows][columns], int x, int y)
+#define sizemin 10
+#define sizemax 100
+#define sizestep 10
+
+#define rows size
+#define columns size
+
+static int size;
+static bool ** grid;		// Current infection status
+static bool ** newGrid;	// temp: next round infection status
+
+int countInfectedNeighbor(int x, int y)
 {
 	int count = 0;
 #if n == 4
@@ -80,7 +88,7 @@ int countInfectedNeighbor(bool grid[rows][columns], int x, int y)
 }
 
 // Random initial seed
-void buildGrid(bool grid[rows][columns], double p)
+void buildGrid(double p)
 {
 	for (int i = 0; i < rows; ++i)
 		for (int j = 0; j < columns; ++j)
@@ -91,20 +99,20 @@ void buildGrid(bool grid[rows][columns], double p)
 }
 
 // Run one round of spread on the grid and set grid changed flag
-void oneRound(bool grid[rows][columns], bool & gridChanged)
+void oneRound(bool & gridChanged)
 {
 	gridChanged = false;
-	bool newGrid[rows][columns];
 
 	for (int i = 0; i < rows; ++i)
 		for (int j = 0; j < columns; ++j)
 		{
-			newGrid[i][j] = grid[i][j];
-			if (!grid[i][j] && countInfectedNeighbor(grid, i, j) >= r)
+			if (!grid[i][j] && countInfectedNeighbor(i, j) >= r)
 			{
 				gridChanged = true;
 				newGrid[i][j] = true;
 			}
+			else
+				newGrid[i][j] = grid[i][j];
 		}
 
 	for (int i = 0; i < rows; ++i)
@@ -117,14 +125,13 @@ void oneRound(bool grid[rows][columns], bool & gridChanged)
 // Returns number of steps
 int oneSimulation(double p)
 {
-	bool grid[rows][columns];
 	bool gridChanged = true;
 	int count = -1; // Counter is added once even if steps is 0
 
-	buildGrid(grid, p);
+	buildGrid(p);
 	while (gridChanged)
 	{
-		oneRound(grid, gridChanged);
+		oneRound(gridChanged);
 		++count;
 	}
 
@@ -137,32 +144,53 @@ int main()
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	printf("This function calculates N(%d, %d, p).\n\n", n, r);
-	printf("Parameters:\nrows = %d, columns = %d, #simulations = %d.\n",
-			rows, columns, simulations);
+	printf("Parameters: #simulations = %d.\n", simulations);
 	printf("p from %f to %f step %f.\n", pmin, pmax, pstep);
-	printf("\np, N(%d, %d, p), SD.\n", n, r);
+	cout << endl;
 
-	clock_t t = clock();
-	int iMax = floor((pmax - pmin) / pstep);
-	for (int i = 0; i < iMax; ++i)
+	for (size = sizemin; size <= sizemax; size += sizestep)
 	{
-		double p = pmin + i * pstep;
-		int steps = 0, steps2 = 0; // sum of x and sum of x^2
-//		#pragma omp parallel for
-		for (int i = 0; i < simulations; ++i)
+		printf("p, N(%d, %d, p), SD, size = %d.\n", n, r, size);
+		cout << endl;
+
+		clock_t t = clock();
+
+		grid = new bool*[rows];
+		for (int i = 0; i < rows; ++i)
+			grid[i] = new bool[columns];
+		newGrid = new bool*[rows];
+		for (int i = 0; i < rows; ++i)
+			newGrid[i] = new bool[columns];
+
+		for (double p = pmin; p <= pmax; p += pstep)
 		{
-			int count = oneSimulation(p);
-			steps += count;
-			steps2 += count * count;
+			int steps = 0, steps2 = 0; // sum of x and sum of x^2
+			for (int i = 0; i < simulations; ++i)
+			{
+				int count = oneSimulation(p);
+				steps += count;
+				steps2 += count * count;
+			}
+			double avg = (double)steps / simulations;
+			double sd = sqrt((double)steps2 / simulations - avg * avg);
+			printf("%f, %f, %f", p, avg, sd);
+			cout << endl;
 		}
-		double avg = (double)steps / simulations;
-		double sd = sqrt((double)steps2 / simulations - avg * avg);
-		printf("%f, %f, %f", p, avg, sd);
+
+		for (int i = 0; i < rows; ++i)
+			delete[] grid[i];
+		delete[] grid;
+		grid = NULL;
+		for (int i = 0; i < rows; ++i)
+			delete[] newGrid[i];
+		delete[] newGrid;
+		newGrid = NULL;
+
+		t = clock() - t;
+
+		printf("\nProcessor time: %f.\n", t / (double)CLOCKS_PER_SEC);
 		cout << endl;
 	}
-
-	t = clock() - t;
-	printf("\nProcessor time: %f.\n", t / (double)CLOCKS_PER_SEC);
 
 	return 0;
 }
