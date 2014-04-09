@@ -6,11 +6,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <iostream>
+#include <fstream>
+#include <time.h>
 #include <cmath>
 #include <omp.h>
 using namespace std;
+
+#define outputfile "output.txt"
 
 // Parameters
 #define	n	6	// side per face
@@ -140,19 +143,28 @@ int oneSimulation(double p)
 
 int main()
 {
+	ofstream output(outputfile, ios::out | ios::app);
+
+	if (!output.is_open())
+	{
+		printf("Failed to open file %s.\nProgram will exit...", outputfile);
+		return -1;
+	}
+
 	// Initialize random seed
 	srand(static_cast<unsigned int>(time(NULL)));
 
-	printf("This function calculates N(%d, %d, p).\n\n", n, r);
-	printf("Parameters: #simulations = %d.\n", simulations);
-	printf("p from %f to %f step %f.\n", pmin, pmax, pstep);
-	cout << endl;
+	output << "This function calculates N(" << n << ", "
+		<< r << ", p).\n\n"
+		<< "Parameters: #simulations = " << simulations
+		<< ".\n" << "p from " << pmin << " to "
+		<< pmax << " step " << pstep << ".\n" << endl;
+
+	output << "p, N(p), SD, size.\n" << endl;
 
 	for (size = sizemin; size <= sizemax; size += sizestep)
 	{
-		printf("p, N(p), SD, size.\n");
-		cout << endl;
-
+		cout << "size = " << size << endl;
 		clock_t t = clock();
 
 		grid = new bool*[rows];
@@ -173,8 +185,7 @@ int main()
 			}
 			double avg = (double)steps / simulations;
 			double sd = sqrt((double)steps2 / simulations - avg * avg);
-			printf("%f, %f, %f, %d", p, avg, sd, size);
-			cout << endl;
+			output << p << ", " << avg << ", " << sd << ", " << size << endl;
 		}
 
 		for (int i = 0; i < rows; ++i)
@@ -188,8 +199,10 @@ int main()
 
 		t = clock() - t;
 
-		printf("\nProcessor time: %f.\n", t / (double)CLOCKS_PER_SEC);
-		cout << endl;
+		output << "\nProcessor time (" << size << "): "
+			<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
+		cout << "\nProcessor time (" << size << "): "
+			<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
 	}
 
 	system("pause");
