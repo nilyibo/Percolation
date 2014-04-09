@@ -148,9 +148,6 @@ int main()
 		return -1;
 	}
 
-	// Initialize random seed
-	srand(static_cast<unsigned int>(time(NULL)));
-
 	output << "This function calculates N(" << n << ", "
 		<< r << ", p).\n\n"
 		<< "Parameters: #simulations = " << simulations
@@ -162,6 +159,8 @@ int main()
 #pragma omp parallel for num_threads(8)
 	for (int size = sizemin; size <= sizemax; size += sizestep)
 	{
+		srand(static_cast<unsigned int>(time(NULL)) ^ omp_get_thread_num());
+
 		cout << "size = " << size << endl;
 		clock_t t = clock();
 
