@@ -164,7 +164,10 @@ int main()
 	{
 		srand(static_cast<unsigned int>(time(NULL)) ^ omp_get_thread_num());
 
-		cout << "size = " << size << endl;
+#pragma omp critical
+		{
+			cout << "size = " << size << endl;
+		}
 
 		bool ** grid = new bool*[size];
 		for (int i = 0; i < size; ++i)
