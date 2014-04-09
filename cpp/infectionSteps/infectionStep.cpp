@@ -156,13 +156,14 @@ int main()
 
 	output << "p, N(p), SD, size.\n" << endl;
 
+	clock_t t = clock();
+
 #pragma omp parallel for num_threads(8)
 	for (int size = sizemin; size <= sizemax; size += sizestep)
 	{
 		srand(static_cast<unsigned int>(time(NULL)) ^ omp_get_thread_num());
 
 		cout << "size = " << size << endl;
-		clock_t t = clock();
 
 		bool ** grid = new bool*[size];
 		for (int i = 0; i < size; ++i)
@@ -196,16 +197,13 @@ int main()
 			delete[] newGrid[i];
 		delete[] newGrid;
 		newGrid = NULL;
-
-		t = clock() - t;
-#pragma omp critical
-		{
-			output << "\nProcessor time (" << size << "): "
-				<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
-			cout << "\nProcessor time (" << size << "): "
-				<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
-		}
 	}
+
+	t = clock() - t;
+	output << "\nProcessor time: "
+		<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
+	cout << "\nProcessor time: "
+		<< t / (double)CLOCKS_PER_SEC << ".\n" << endl;
 
 	system("pause");
 	return 0;
