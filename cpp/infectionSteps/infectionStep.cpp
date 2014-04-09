@@ -137,7 +137,9 @@ int main()
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	printf("This function calculates N(%d, %d, p).\n\n", n, r);
-	printf("p, N(%d, %d, p), SD.\n", n, r);
+	printf("Parameters:\nrows = %d, columns = %d, #simulations = %d.\n", rows, columns, simulations);
+	printf("p from %f to %f step %f.\n", pmin, pmax, pstep);
+	printf("\np, N(%d, %d, p), SD.\n", n, r);
 
 	clock_t t = clock();
 	for (double p = pmin; p < pmax; p += pstep)
