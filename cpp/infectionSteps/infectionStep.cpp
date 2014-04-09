@@ -94,19 +94,22 @@ void buildGrid(bool grid[rows][columns], double p)
 void oneRound(bool grid[rows][columns], bool & gridChanged)
 {
 	gridChanged = false;
-	vector<int> modified;
+	bool newGrid[rows][columns];
 
 	for (int i = 0; i < rows; ++i)
 		for (int j = 0; j < columns; ++j)
+		{
+			newGrid[i][j] = grid[i][j];
 			if (!grid[i][j] && countInfectedNeighbor(grid, i, j) >= r)
 			{
-				modified.push_back(i * columns + j); // Record the changes
 				gridChanged = true;
+				newGrid[i][j] = true;
 			}
+		}
 
-	// Apply changes after iteration
-	for (vector<int>::iterator it = modified.begin(); it != modified.end(); ++it)
-		grid[(*it) / columns][(*it) % columns] = true;
+	for (int i = 0; i < rows; ++i)
+		for (int j = 0; j < columns; ++j)
+			grid[i][j] = newGrid[i][j];
 }
 
 
