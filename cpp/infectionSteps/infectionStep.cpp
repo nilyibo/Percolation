@@ -18,12 +18,12 @@ using namespace std;
 // Parameters
 #define	n	6	// side per face
 #define	r	3	// infection threhold
-#define	pmin	0.05
-#define	pmax	0.35
+#define	pmin	0.06
+#define	pmax	0.06
 #define	pstep	0.01
-#define simulations 100
+#define simulations 10000
 
-#define sizemin 10
+#define sizemin 100
 #define sizemax 100
 #define sizestep 10
 
@@ -181,7 +181,7 @@ int main()
 			int steps = 0, steps2 = 0; // sum of x and sum of x^2
 			for (int i = 0; i < simulations; ++i)
 			{
-				int count = oneSimulation(grid, newGrid, p, size);
+				long count = oneSimulation(grid, newGrid, p, size);
 				steps += count;
 				steps2 += count * count;
 			}

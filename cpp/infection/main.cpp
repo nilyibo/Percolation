@@ -178,7 +178,7 @@ int main()
 
 		for (double p = pmin; p <= pmax; p += pstep)
 		{
-			int steps = 0, steps2 = 0; // sum of x and sum of x^2
+			long steps = 0, steps2 = 0; // sum of x and sum of x^2
 			for (int i = 0; i < simulations; ++i)
 			{
 				int count = oneSimulation(grid, newGrid, p, size);
