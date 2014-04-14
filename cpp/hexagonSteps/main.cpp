@@ -17,13 +17,13 @@ using namespace std;
 // Parameters
 #define	N	6	// Hexagon
 #define	R	3	// infection threhold
-#define	pmin	0.0
-#define	pmax	0.5
-#define	pstep	0.05
-#define simulations 1000
+#define	pmin	0.2
+#define	pmax	0.4
+#define	pstep	0.01
+#define simulations 10000
 
 #define sizemin 5
-#define sizemax 50
+#define sizemax 5
 #define sizestep 5
 
 #define DEBUG 0
@@ -103,9 +103,10 @@ void oneRound(bool ** grid, bool ** newGrid, bool & gridChanged, int size)
 
 // Run one simulation with the given probability
 // Returns number of steps
-int oneSimulation(bool ** grid, bool ** newGrid, double p, int size)
+int oneSimulation(bool ** grid, bool ** newGrid, double p, int size, bool & percolated)
 {
 	bool gridChanged = true;
+	percolated = true;
 	int steps = -1; // Counter is added once even if steps is 0
 
 	buildGrid(grid, p, size);
@@ -114,6 +115,14 @@ int oneSimulation(bool ** grid, bool ** newGrid, double p, int size)
 		oneRound(grid, newGrid, gridChanged, size);
 		++steps;
 	}
+
+	for (int i = 0; i < 2 * size - 1; ++i)
+		for (int j = minx(i, size); j < maxx(i, size); ++j)
+			if (!grid[i][j])
+			{
+				percolated = false;
+				return steps;	// No need to check further
+			}
 
 	return steps;
 }
@@ -135,7 +144,7 @@ int main()
 		<< ".\n" << "p from " << pmin << " to "
 		<< pmax << " step " << pstep << ".\n" << endl;
 
-	output << "p, N(p), SD, size.\n" << endl;
+	output << "p, N(p), SD, #percolation, size.\n" << endl;
 
 	srand(static_cast<unsigned int>(time(NULL)));
 	double startTime = static_cast<double>(time(NULL));
@@ -155,15 +164,19 @@ int main()
 		for (double p = pmin; p <= pmax; p += pstep)
 		{
 			int steps = 0, steps2 = 0; // sum of x and sum of x^2
+			bool percolated;
+			int pCount = 0; // count of percolation times
 			for (int i = 0; i < simulations; ++i)
 			{
-				long count = oneSimulation(grid, newGrid, p, size);
+				long count = oneSimulation(grid, newGrid, p, size, percolated);
 				steps += count;
 				steps2 += count * count;
+				if (percolated)
+					++pCount;
 			}
 			double avg = (double)steps / simulations;
 			double sd = sqrt((double)steps2 / simulations - avg * avg);
-			output << p << ", " << avg << ", " << sd << ", " << size << endl;
+			output << p << ", " << avg << ", " << sd << ", " << pCount << ", " << size << endl;
 		}
 
 		for (int i = 0; i < 2 * size - 1; ++i)
