@@ -33,7 +33,7 @@ var force = d3.layout.force()
     .on('tick', tick)
 
 // define arrow markers for graph links
-svg.append('svg:defs').append('svg:marker')
+/*svg.append('svg:defs').append('svg:marker')
     .attr('id', 'end-arrow')
     .attr('viewBox', '0 -5 10 10')
     .attr('refX', 6)
@@ -53,7 +53,7 @@ svg.append('svg:defs').append('svg:marker')
     .attr('orient', 'auto')
   .append('svg:path')
     .attr('d', 'M10,-5L0,0L10,5')
-    .attr('fill', '#000');
+    .attr('fill', '#000');*/
 
 // line displayed when dragging new nodes
 var drag_line = svg.append('svg:path')
@@ -107,16 +107,16 @@ function restart() {
 
   // update existing links
   path.classed('selected', function(d) { return d === selected_link; })
-    .style('marker-start', function(d) { return 'url(#start-arrow)'; })
-    .style('marker-end', function(d) { return 'url(#end-arrow)'; });
+    /*.style('marker-start', function(d) { return 'url(#start-arrow)'; })
+    .style('marker-end', function(d) { return 'url(#end-arrow)'; })*/;
 
 
   // add new links
   path.enter().append('svg:path')
     .attr('class', 'link')
     .classed('selected', function(d) { return d === selected_link; })
-    .style('marker-start', function(d) { return 'url(#start-arrow)'; })
-    .style('marker-end', function(d) { return 'url(#end-arrow)'; })
+    /*.style('marker-start', function(d) { return 'url(#start-arrow)'; })
+    .style('marker-end', function(d) { return 'url(#end-arrow)'; })*/
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
 
@@ -187,7 +187,7 @@ function restart() {
 
       // reposition drag line
       drag_line
-        .style('marker-end', 'url(#end-arrow)')
+        /*.style('marker-end', 'url(#end-arrow)')*/
         .classed('hidden', false)
         .attr('d', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y);
 
@@ -199,7 +199,7 @@ function restart() {
       // needed by FF
       drag_line
         .classed('hidden', true)
-        .style('marker-end', 'url(#end-arrow)');
+        /*.style('marker-end', 'url(#end-arrow)')*/;
 
       // check for drag-to-self
       mouseup_node = d;
@@ -295,7 +295,7 @@ function mouseup() {
     // hide drag line
     drag_line
       .classed('hidden', true)
-      .style('marker-end', 'url(#end-arrow)');
+      /*.style('marker-end', 'url(#end-arrow)')*/;
   }
 
   // because :active only works in WebKit?
