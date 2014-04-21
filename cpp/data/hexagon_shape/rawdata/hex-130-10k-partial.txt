@@ -1,0 +1,11 @@
+This function calculates N(6, 3, p).
+
+Parameters: #simulations = 10000.
+p from 0.05 to 0.15 step 0.005.
+
+p, N(p), SD, #percolation, size.
+
+0.05, 22.0074, 39.8391, 15, 130
+0.055, 37.5797, 92.9192, 112, 130
+0.06, 91.4267, 199.221, 691, 130
+0.065, 215.202, 297.679, 2436, 130
