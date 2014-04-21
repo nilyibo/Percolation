@@ -154,3 +154,5 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+cpp/hexagonSteps/hexagonSteps.vcxproj
+cpp/hexagonSteps/hexagonSteps.vcxproj
