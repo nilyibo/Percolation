@@ -9,7 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
-#include <cmath>
 using namespace std;
 
 #define outputfile "output.txt"
@@ -17,17 +16,19 @@ using namespace std;
 // Parameters
 #define	N	6	// Hexagon
 #define	R	3	// infection threhold
-#define	pmin	0.2
-#define	pmax	0.4
+#define	pmin	0.0
+#define	pmax	0.5
 #define	pstep	0.01
-#define simulations 10000
+#define simulations 1000
 
-#define sizemin 5
-#define sizemax 5
-#define sizestep 5
+#define sizemin 10
+#define sizemax 100
+#define sizestep 10
 
-#define DEBUG 0
+//#define DEBUG
 
+#define max(a, b) ((a > b) ? a : b)
+#define min(a, b) ((a < b) ? a : b)
 #define minx(row, size) (max(size - 1 - row, 0))
 #define maxx(row, size) (-2 + 2  * size + min(size - 1 - row, 0))
 
@@ -40,6 +41,7 @@ static int neighbors[6][2] = {
 
 int countInfectedNeighbor(bool ** grid, int row, int col, int size)
 {
+	int a = max(1, 2);
 	int count = 0;
 	for (int n = 0; n < 6; ++n)
 	{
@@ -59,7 +61,7 @@ void buildGrid(bool ** grid, double p, int size)
 	for (int i = 0; i < 2 * size - 1; ++i)
 		for (int j = 0; j < 2 * size - 1; ++j)
 		{
-			if (static_cast<double>(rand()) / RAND_MAX < p)
+			if (static_cast<double>(rand()) / RAND_MAX <= p)
 			{
 				grid[i][j] = true;
 			}
@@ -77,7 +79,7 @@ void oneRound(bool ** grid, bool ** newGrid, bool & gridChanged, int size)
 	{
 		for (int j = minx(i, size); j <= maxx(i, size); ++j)
 		{
-#if DEBUG
+#ifdef DEBUG
 			cerr << i << ", " << j << "\t";
 #else
 			if (!grid[i][j] && countInfectedNeighbor(grid, i, j, size) >= R)
@@ -89,11 +91,11 @@ void oneRound(bool ** grid, bool ** newGrid, bool & gridChanged, int size)
 				newGrid[i][j] = grid[i][j];
 #endif
 		}
-#if DEBUG
+#ifdef DEBUG
 		cerr << endl;
 #endif
 	}
-#if !DEBUG
+#ifndef DEBUG
 	for (int i = 0; i < 2 * size - 1; ++i)
 		for (int j = 0; j < 2 * size - 1; ++j)
 			grid[i][j] = newGrid[i][j];
@@ -129,7 +131,7 @@ int oneSimulation(bool ** grid, bool ** newGrid, double p, int size, bool & perc
 
 int main()
 {
-#if !DEBUG
+#ifndef DEBUG
 	ofstream output(outputfile, ios::out | ios::app);
 
 	if (!output.is_open())
