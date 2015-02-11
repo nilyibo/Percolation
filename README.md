@@ -23,8 +23,8 @@ Visit our live page at [Percolation - Epidemic Graph](http://nilyibo.github.io/P
 
 ## Authors
 
-[Yibo G](https://github.com/nilyibo)
+[Yibo Guo](https://github.com/nilyibo)
 
 ## Copyright
 
-Copyright (c) 2014 Yibo G. See LICENSE for details.
+Copyright (c) 2014 Yibo Guo. See LICENSE for details.

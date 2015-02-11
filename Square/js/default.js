@@ -2,7 +2,7 @@
  * This file contains the function for running the epidemics on square grid
  *
  * @file default.js
- * @author Yibo G (https://github.com/nilyibo)
+ * @author Yibo Guo (https://github.com/nilyibo)
  */
 
 var globalThreshold = 1; // Initial threshold for all nodes

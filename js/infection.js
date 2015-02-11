@@ -2,7 +2,7 @@
  * This file contains the function for running the epidemics
  *
  * @file infection.js
- * @author Yibo G (https://github.com/nilyibo)
+ * @author Yibo Guo (https://github.com/nilyibo)
  */
 
 /*

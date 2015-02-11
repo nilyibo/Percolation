@@ -1,6 +1,6 @@
 /**
 * @file infectionStep.cpp
-* @author Yibo G (https://github.com/nilyibo)
+* @author Yibo Guo (https://github.com/nilyibo)
 * This function is used to calcualte N(n = 6, r, p) for percolation on regular lattice
 */
 
